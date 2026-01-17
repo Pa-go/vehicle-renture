@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+body {
+  background-color: #E6F0F4;
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+h1 {
+  font-weight: bold;
+  margin: 0;
+  color: #001F3F;
+}
+
+p {
+  font-size: 14px;
+  font-weight: 100;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  margin: 20px 0 30px;
+  color: #001F3F;
+}
+span, a {
+  font-size: 12px;
+  color: #001F3F;
+}
+button {
+  border-radius: 20px;
+  border: 1px solid #FFD700;
+  background-color: #FFD700;
+  color: #001F3F;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px 45px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: transform 80ms ease-in;
+}
+button:active { transform: scale(0.95); }
+button:focus { outline: none; }
+button.ghost {
+  background-color: transparent;
+  border-color: #FFD700;
+  color: #FFFFFF;
+}
+
+form {
+  background-color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 50px;
+  height: 100%;
+  text-align: center;
+  gap: 10px;
+  overflow-y: auto; /* ENABLE SCROLL */
+}
+
+input {
+  background-color: #EEE;
+  border: 1px solid #FFD700;
+  padding: 12px 15px;
+  width: 100%;
+  border-radius: 8px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+input.email-input {
+  transition: border-color 0.3s ease;
+}
+
+input.email-input:focus {
+  outline: none;
+  border-color: #001F3F;
+}
+
+input.email-input.invalid {
+  border-color: #ff4444;
+  background-color: #ffe6e6;
+}
+
+input.email-input.valid {
+  border-color: #4CAF50;
+  background-color: #e8f5e9;
+}
+
+.email-error {
+  color: #ff4444;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;
+  display: none;
+  padding-left: 5px;
+  line-height: 1.4;
+}
+
+.email-error.show {
+  display: block;
+}
+
+.email-success {
+  color: #4CAF50;
+  font-size: 12px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  text-align: left;
+  display: none;
+  padding-left: 5px;
+  line-height: 1.4;
+}
+
+.email-success.show {
+  display: block;
+}
+
+/* Password Validation Styles */
+.password-validation {
+  margin-top: 8px;
+  margin-bottom: 8px;
+  text-align: left;
+  padding-left: 5px;
+}
+
+.password-requirement {
+  font-size: 12px;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  transition: color 0.3s ease;
+  line-height: 1.5;
+  direction: ltr;
+}
+
+.password-requirement > span:first-of-type {
+  flex: 1;
+  text-align: left;
+  order: 1;
+}
+
+.password-requirement-icon {
+  order: 2;
+  flex-shrink: 0;
+}
+
+.password-requirement.invalid {
+  color: #ff4444;
+}
+
+.password-requirement.valid {
+  color: #4CAF50;
+}
+
+.password-requirement-icon {
+  font-size: 16px;
+  width: 20px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  min-width: 20px;
+}
+
+input.password-input.invalid {
+  border-color: #ff4444;
+  background-color: #ffe6e6;
+}
+
+input.password-input.valid {
+  border-color: #4CAF50;
+  background-color: #e8f5e9;
+}
+
+/* SOCIAL BUTTONS moved to bottom */
+.social-container {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: 10px;
+}
+.social-container a {
+  border: 1px solid #193857;
+  border-radius: 50%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 5px;
+  height: 40px;
+  width: 40px;
+  color: #193857;
+}
+
+.container {
+  background-color: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+  width: 850px;
+  max-width: 95%;
+  min-height: 520px;
+}
+
+.form-container {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  transition: all 0.6s ease-in-out;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  left: 0;
+  width: 50%;
+  z-index: 2;
+}
+.register-container {
+  left: 0;
+  width: 50%;
+  opacity: 0;
+  z-index: 1;
+  }
+
+.container.right-panel-active .login-container {
+  transform: translateX(100%);
+}
+.container.right-panel-active .register-container {
+  transform: translateX(100%);
+  opacity: 1;
+  z-index: 5;
+  animation: show 0.6s;
+}
+@keyframes show {
+  0%, 49.99% { opacity: 0; z-index: 1; }
+  50%, 100% { opacity: 1; z-index: 5; }
+}
+
+.overlay-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 0.6s ease-in-out;
+  z-index: 100;
+}
+.container.right-panel-active .overlay-container {
+  transform: translateX(-100%);
+}
+
+.overlay {
+  background: linear-gradient(to right, #193857, #001F3F);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: 0 0;
+  color: #F5F5F5;
+  position: relative;
+  left: -100%;
+  height: 100%;
+  width: 200%;
+  transform: translateX(0);
+  transition: transform 0.6s ease-in-out;
+}
+.container.right-panel-active .overlay {
+  transform: translateX(50%);
+}
+
+.overlay-panel {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 40px;
+  text-align: center;
+  top: 0;
+  height: 100%;
+  width: 50%;
+  font-size: 32px;
+  max-width: 100%;
+}
+
+.overlay-left {
+  transform: translateX(-20%);
+}
+.container.right-panel-active .overlay-left {
+  transform: translateX(0);
+}
+.overlay-right {
+  right: 0;
+  transform: translateX(0);
+}
+.container.right-panel-active .overlay-right {
+  transform: translateX(20%);
+}
+
+.h1_reg{
+  color:#FFFFFF;
+  justify-content: center;
+}
+
+.p_reg{
+  color:#FFFFFF;
+  justify-content: center;
+}
+
+.p-login{
+  color:#FFFFFF;
+  justify-content: center;
+  text-align: center; /* ensure paragraph text is centered within overlay */
+}
+
+.h1_reg{
+  color:#FFFFFF;
+  justify-content: center;
+}
+
+
+/* Center overlay right text (register panel) */
+.h1_reg, .h1_login {
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.p_reg, .p_reg {
+  color: #FFFFFF;
+  max-width: 80%;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .container { width: 95%; min-height: 600px; }
+  .overlay-container { display: none; }
+  .login-container, .register-container {
+    width: 100%;
+    position: relative;
+    opacity: 1 !important;
+  }
+}
+/* BUTTON HOVER EFFECT */
+button:hover {
+  background-color: #001F3F;
+  color: #FFD700;
+  border-color: #001F3F;
+  transform: scale(1.05);
+}
+button.ghost:hover {
+  background-color: #FFD700;
+  color: #001F3F;
+  border-color: #FFD700;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- Message box used by script.js to show brief messages -->
+<div id="messageBox" style="display:none;position:fixed;top:10px;right:10px;background:#001F3F;color:#fff;padding:8px 12px;border-radius:6px;z-index:10000;font-family:Arial, sans-serif;"></div>
+
+<div class="container" id="container">
+
+  <!-- LOGIN FORM -->
+      <div class="form-container login-container">
+        <form action="login-register.php" method="post" style="justify-content: center;">
+          <h1 data-i18n="login.title">Login</h1>
+
+          <!--<span>or use your account</span>-->
+            <div style="position: relative; margin-bottom: 5px;">
+              <input type="text" class="email-input" name="Email" id="loginEmail" placeholder="Email" data-i18n-placeholder="login.email" autocomplete="email" />
+              <div class="email-error" id="loginEmailError"></div>
+              <div class="email-success" id="loginEmailSuccess">Valid email format</div>
+            </div>
+            <input type="password" name="Password" placeholder="Password" data-i18n-placeholder="login.password" />
+            <a href="#" style="align-self: flex-start; margin-left: 5px;">Forgot your password?</a>
+            <button name="login" data-i18n="btn.login">Login</button>
+
+          <!-- SOCIAL ICONS MOVED TO BOTTOM -->
+          <div class="social-container" style="margin-top: 20px;">
+            <a href="#">F</a>
+            <a href="#">G+</a>
+            <a href="#">In</a>
+          </div>
+    </form>
+  </div>
+
+  <!-- REGISTER FORM -->
+  <div class="form-container register-container">
+    <form action="login-register.php" method="post">
+      <h1 data-i18n="register.title">Create Account</h1>
+
+      <!--<span>or use your email for registration</span>-->
+
+      <input type="text" name="Name" placeholder="Name" data-i18n-placeholder="register.name" />
+      <input type="number" name="Age" placeholder="Age"  max="100" min="1" data-i18n-placeholder="register.age" />
+      <input type="text" name="Contact" placeholder="Contact" data-i18n-placeholder="register.contact" />
+      <input type="text" name="Address" placeholder="Address" data-i18n-placeholder="register.address" />
+      <div style="position: relative; margin-bottom: 5px;">
+        <input type="text" class="email-input" name="Email" id="registerEmail" placeholder="Email" data-i18n-placeholder="register.email" autocomplete="email" />
+        <div class="email-error" id="registerEmailError"></div>
+        <div class="email-success" id="registerEmailSuccess">Valid email format</div>
+      </div>
+      <div style="position: relative; margin-bottom: 5px;">
+        <input type="password" class="password-input" name="Password" id="registerPassword" placeholder="Password" data-i18n-placeholder="register.password" autocomplete="new-password" />
+        <div class="password-validation" id="passwordValidation" style="display: none;">
+          <div class="password-requirement invalid" id="reqLength">
+            <span>8-11 characters long</span>
+            <span class="password-requirement-icon">✗</span>
+          </div>
+          <div class="password-requirement invalid" id="reqUppercase">
+            <span>One uppercase letter (A-Z)</span>
+            <span class="password-requirement-icon">✗</span>
+          </div>
+          <div class="password-requirement invalid" id="reqNumber">
+            <span>One number (0-9)</span>
+            <span class="password-requirement-icon">✗</span>
+          </div>
+          <div class="password-requirement invalid" id="reqSpecial">
+            <span>One special character (!@#$%^&*)</span>
+            <span class="password-requirement-icon">✗</span>
+          </div>
+        </div>
+      </div>
+      <input type="password" name="Confirm_Password" placeholder="Confirm Password" data-i18n-placeholder="register.confirm" />
+      <input type="date" name="DOB" placeholder="DOB" data-i18n-placeholder="register.dob" />
+
+      <button name="register" data-i18n="btn.register">Register</button>
+
+      <!-- SOCIAL ICONS MOVED TO BOTTOM -->
+      <div class="social-container">
+        <a href="#">F</a>
+        <a href="#">G+</a>
+        <a href="#">In</a>
+      </div>
+    </form>
+  </div>
+
+  <!-- OVERLAY -->
+  <div class="overlay-container">
+    <div class="overlay">
+      <div class="overlay-panel overlay-left">
+        <h1 class="h1_login" data-i18n="overlay.join">Join Renture!</h1>
+        <p class="p-login" data-i18n="overlay.create">Create your account Now!! </p>
+        <button class="ghost" id="login" data-i18n="btn.login">Login</button>
+      </div>
+
+      <div class="overlay-panel overlay-right">
+        <h1 class="h1_reg" data-i18n="overlay.hello">Hello, Friend!</h1>
+        <p class="p_reg" data-i18n="overlay.details">Enter your personal details and start your journey with us</p>
+        <button class="ghost" id="register" data-i18n="btn.register">Register</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+<script>
+const registerButton = document.getElementById('register');
+const loginButton = document.getElementById('login');
+const container = document.getElementById('container');
+
+// PANEL SWITCH
+registerButton.addEventListener('click', () => {
+  container.classList.add('right-panel-active');
+});
+loginButton.addEventListener('click', () => {
+  container.classList.remove('right-panel-active');
+});
+
+// Email validation function
+function validateEmail(email) {
+  // Check if email is empty
+  if (!email || email.trim() === '') {
+    return { valid: false, message: 'Email is required' };
+  }
+
+  // Check if @ symbol is missing
+  if (!email.includes('@')) {
+    return { valid: false, message: 'Email must contain @ symbol (e.g., user@gmail.com)' };
+  }
+
+  // Check if there's text before @
+  const atIndex = email.indexOf('@');
+  if (atIndex === 0) {
+    return { valid: false, message: 'Email must have text before @ (e.g., username@gmail.com)' };
+  }
+
+  // Check if there's text after @
+  if (atIndex === email.length - 1) {
+    return { valid: false, message: 'Email must have domain after @ (e.g., user@gmail.com)' };
+  }
+
+  // Split email into local and domain parts
+  const parts = email.split('@');
+  if (parts.length !== 2) {
+    return { valid: false, message: 'Email can only have one @ symbol' };
+  }
+
+  const localPart = parts[0];
+  const domainPart = parts[1];
+
+  // Validate local part (before @)
+  if (localPart.length === 0) {
+    return { valid: false, message: 'Email must have text before @' };
+  }
+
+  if (localPart.length > 64) {
+    return { valid: false, message: 'Email username is too long (max 64 characters)' };
+  }
+
+  // Check for invalid characters in local part
+  if (!/^[a-zA-Z0-9._+-]+$/.test(localPart)) {
+    return { valid: false, message: 'Email username contains invalid characters. Use letters, numbers, dots, hyphens, or underscores' };
+  }
+
+  // Validate domain part (after @)
+  if (domainPart.length === 0) {
+    return { valid: false, message: 'Email must have domain after @ (e.g., gmail.com)' };
+  }
+
+  // Check if domain has a dot
+  if (!domainPart.includes('.')) {
+    return { valid: false, message: 'Domain must include a dot (e.g., gmail.com, yahoo.com)' };
+  }
+
+  // Split domain into name and extension
+  const domainParts = domainPart.split('.');
+  if (domainParts.length < 2) {
+    return { valid: false, message: 'Domain must have extension (e.g., .com, .org, .net)' };
+  }
+
+  const domainName = domainParts[0];
+  const domainExt = domainParts[domainParts.length - 1];
+
+  // Validate domain name
+  if (domainName.length === 0) {
+    return { valid: false, message: 'Domain name is missing (e.g., gmail.com)' };
+  }
+
+  if (!/^[a-zA-Z0-9-]+$/.test(domainName)) {
+    return { valid: false, message: 'Domain name contains invalid characters' };
+  }
+
+  // Validate domain extension
+  if (domainExt.length < 2) {
+    return { valid: false, message: 'Domain extension must be at least 2 characters (e.g., .com, .org)' };
+  }
+
+  if (!/^[a-zA-Z]+$/.test(domainExt)) {
+    return { valid: false, message: 'Domain extension must contain only letters' };
+  }
+
+  // Final regex check for comprehensive validation
+  const emailRegex = /^[a-zA-Z0-9._+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  if (!emailRegex.test(email)) {
+    return { valid: false, message: 'Please enter a valid email address (e.g., user@gmail.com)' };
+  }
+
+  return { valid: true, message: 'Valid email format' };
+}
+
+// Setup email validation for login form
+const loginEmailInput = document.getElementById('loginEmail');
+const loginEmailError = document.getElementById('loginEmailError');
+const loginEmailSuccess = document.getElementById('loginEmailSuccess');
+const loginForm = document.querySelector('.login-container form');
+
+if (loginEmailInput) {
+  loginEmailInput.addEventListener('input', function() {
+    const email = this.value.trim();
+    const validation = validateEmail(email);
+
+    // Remove previous classes
+    this.classList.remove('valid', 'invalid');
+    loginEmailError.classList.remove('show');
+    loginEmailSuccess.classList.remove('show');
+
+    if (email.length > 0) {
+      if (validation.valid) {
+        this.classList.add('valid');
+        loginEmailSuccess.classList.add('show');
+      } else {
+        this.classList.add('invalid');
+        loginEmailError.textContent = validation.message;
+        loginEmailError.classList.add('show');
+      }
+    }
+  });
+
+  // Validate on blur (when user leaves the field)
+  loginEmailInput.addEventListener('blur', function() {
+    const email = this.value.trim();
+    const validation = validateEmail(email);
+    
+    if (email.length > 0 && !validation.valid) {
+      this.classList.add('invalid');
+      loginEmailError.textContent = validation.message;
+      loginEmailError.classList.add('show');
+    }
+  });
+
+  // Prevent form submission if email is invalid
+  if (loginForm) {
+    loginForm.addEventListener('submit', function(e) {
+      const email = loginEmailInput.value.trim();
+      
+      // Check if email is empty
+      if (email.length === 0) {
+        e.preventDefault();
+        loginEmailInput.classList.add('invalid');
+        loginEmailError.textContent = 'Email is required';
+        loginEmailError.classList.add('show');
+        loginEmailInput.focus();
+        return false;
+      }
+      
+      const validation = validateEmail(email);
+      
+      if (!validation.valid) {
+        e.preventDefault();
+        loginEmailInput.classList.add('invalid');
+        loginEmailError.textContent = validation.message;
+        loginEmailError.classList.add('show');
+        loginEmailInput.focus();
+        
+        // Show alert for better visibility
+        alert('Please enter a valid email address before submitting.');
+        return false;
+      }
+    });
+  }
+}
+
+// Setup email validation for registration form
+const registerEmailInput = document.getElementById('registerEmail');
+const registerEmailError = document.getElementById('registerEmailError');
+const registerEmailSuccess = document.getElementById('registerEmailSuccess');
+const registerForm = document.querySelector('.register-container form');
+
+if (registerEmailInput) {
+  registerEmailInput.addEventListener('input', function() {
+    const email = this.value.trim();
+    const validation = validateEmail(email);
+
+    // Remove previous classes
+    this.classList.remove('valid', 'invalid');
+    registerEmailError.classList.remove('show');
+    registerEmailSuccess.classList.remove('show');
+
+    if (email.length > 0) {
+      if (validation.valid) {
+        this.classList.add('valid');
+        registerEmailSuccess.classList.add('show');
+      } else {
+        this.classList.add('invalid');
+        registerEmailError.textContent = validation.message;
+        registerEmailError.classList.add('show');
+      }
+    }
+  });
+
+  // Validate on blur (when user leaves the field)
+  registerEmailInput.addEventListener('blur', function() {
+    const email = this.value.trim();
+    const validation = validateEmail(email);
+    
+    if (email.length > 0 && !validation.valid) {
+      this.classList.add('invalid');
+      registerEmailError.textContent = validation.message;
+      registerEmailError.classList.add('show');
+    }
+  });
+
+  // Prevent form submission if email is invalid
+  if (registerForm) {
+    registerForm.addEventListener('submit', function(e) {
+      const email = registerEmailInput.value.trim();
+      
+      // Check if email is empty
+      if (email.length === 0) {
+        e.preventDefault();
+        registerEmailInput.classList.add('invalid');
+        registerEmailError.textContent = 'Email is required';
+        registerEmailError.classList.add('show');
+        registerEmailInput.focus();
+        return false;
+      }
+      
+      const validation = validateEmail(email);
+      
+      if (!validation.valid) {
+        e.preventDefault();
+        registerEmailInput.classList.add('invalid');
+        registerEmailError.textContent = validation.message;
+        registerEmailError.classList.add('show');
+        registerEmailInput.focus();
+        
+        // Show alert for better visibility
+        alert('Please enter a valid email address before submitting.');
+        return false;
+      }
+      
+      // Validate password
+      const password = document.getElementById('registerPassword').value;
+      const passwordValidation = validatePassword(password);
+      
+      if (!passwordValidation.valid) {
+        e.preventDefault();
+        const passwordInput = document.getElementById('registerPassword');
+        passwordInput.classList.add('invalid');
+        passwordInput.focus();
+        alert('Please ensure your password meets all requirements.');
+        return false;
+      }
+    });
+  }
+}
+
+// Password validation function
+function validatePassword(password) {
+  const requirements = {
+    length: password.length >= 8 && password.length <= 11,
+    uppercase: /[A-Z]/.test(password),
+    number: /[0-9]/.test(password),
+    special: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)
+  };
+  
+  const allValid = requirements.length && requirements.uppercase && requirements.number && requirements.special;
+  
+  return {
+    valid: allValid,
+    requirements: requirements
+  };
+}
+
+// Setup password validation for registration form
+const registerPasswordInput = document.getElementById('registerPassword');
+const passwordValidationDiv = document.getElementById('passwordValidation');
+
+if (registerPasswordInput && passwordValidationDiv) {
+  // Show validation requirements when user focuses on password field
+  registerPasswordInput.addEventListener('focus', function() {
+    passwordValidationDiv.style.display = 'block';
+  });
+  
+  // Real-time validation as user types
+  registerPasswordInput.addEventListener('input', function() {
+    const password = this.value;
+    const validation = validatePassword(password);
+    
+    // Update length requirement
+    const reqLength = document.getElementById('reqLength');
+    const reqLengthIcon = reqLength.querySelector('.password-requirement-icon');
+    if (validation.requirements.length) {
+      reqLength.classList.remove('invalid');
+      reqLength.classList.add('valid');
+      reqLengthIcon.textContent = '✓';
+      reqLengthIcon.style.color = '#4CAF50';
+    } else {
+      reqLength.classList.remove('valid');
+      reqLength.classList.add('invalid');
+      reqLengthIcon.textContent = '✗';
+      reqLengthIcon.style.color = '#ff4444';
+    }
+    
+    // Update uppercase requirement
+    const reqUppercase = document.getElementById('reqUppercase');
+    const reqUppercaseIcon = reqUppercase.querySelector('.password-requirement-icon');
+    if (validation.requirements.uppercase) {
+      reqUppercase.classList.remove('invalid');
+      reqUppercase.classList.add('valid');
+      reqUppercaseIcon.textContent = '✓';
+      reqUppercaseIcon.style.color = '#4CAF50';
+    } else {
+      reqUppercase.classList.remove('valid');
+      reqUppercase.classList.add('invalid');
+      reqUppercaseIcon.textContent = '✗';
+      reqUppercaseIcon.style.color = '#ff4444';
+    }
+    
+    // Update number requirement
+    const reqNumber = document.getElementById('reqNumber');
+    const reqNumberIcon = reqNumber.querySelector('.password-requirement-icon');
+    if (validation.requirements.number) {
+      reqNumber.classList.remove('invalid');
+      reqNumber.classList.add('valid');
+      reqNumberIcon.textContent = '✓';
+      reqNumberIcon.style.color = '#4CAF50';
+    } else {
+      reqNumber.classList.remove('valid');
+      reqNumber.classList.add('invalid');
+      reqNumberIcon.textContent = '✗';
+      reqNumberIcon.style.color = '#ff4444';
+    }
+    
+    // Update special character requirement
+    const reqSpecial = document.getElementById('reqSpecial');
+    const reqSpecialIcon = reqSpecial.querySelector('.password-requirement-icon');
+    if (validation.requirements.special) {
+      reqSpecial.classList.remove('invalid');
+      reqSpecial.classList.add('valid');
+      reqSpecialIcon.textContent = '✓';
+      reqSpecialIcon.style.color = '#4CAF50';
+    } else {
+      reqSpecial.classList.remove('valid');
+      reqSpecial.classList.add('invalid');
+      reqSpecialIcon.textContent = '✗';
+      reqSpecialIcon.style.color = '#ff4444';
+    }
+    
+    // Update input field styling
+    this.classList.remove('valid', 'invalid');
+    if (password.length > 0) {
+      if (validation.valid) {
+        this.classList.add('valid');
+      } else {
+        this.classList.add('invalid');
+      }
+    }
+  });
+  
+  // Hide validation when user leaves field (if password is valid)
+  registerPasswordInput.addEventListener('blur', function() {
+    const password = this.value;
+    const validation = validatePassword(password);
+    if (validation.valid) {
+      passwordValidationDiv.style.display = 'none';
+    }
+  });
+}
+
+</script>
+
+</body>
+</html> 
+
+<!-- Include shared scripts so i18n and UI logic run on this page -->
+<script src="script.js"></script>

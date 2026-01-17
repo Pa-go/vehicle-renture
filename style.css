@@ -1,0 +1,701 @@
+/* ------------------- GLOBAL ------------------- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #E6F0F4;
+}
+
+/* ------------------- HEADER ------------------- */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #FFFFFF;
+    padding: 5px 15px;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 2000;
+    background: linear-gradient(135deg, #001F3F, #193857);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+    height: 60px;
+}
+
+.left-section {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* space between logo and search bar */
+}
+
+.logo {
+    height: 90px;
+}
+
+.search-box {
+    display: flex;
+    align-items: center;
+    background: #193857;
+    border-radius: 25px;
+    padding: 8px 16px;
+    width: 280px;
+    height: 38px;
+    box-sizing: border-box;
+}
+
+.search-box input {
+    border: none;
+    background: transparent;
+    outline: none;
+    color: #FFFFFF;
+    width: 100%;
+    font-size: 15px;
+}
+
+.search-box input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+    opacity: 1;
+}
+
+.right-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+    margin-right: 25px; /* bumped further away from the right scrollbar */
+}
+
+.icon {
+    font-size: 20px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 6px;
+    color: #FFFFFF;
+}
+
+.login-btn {
+    color: #001F3F;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    border: none;
+    background: linear-gradient(45deg, #FFD700, #FFC107);
+}
+
+.login-btn:hover {
+    background: linear-gradient(45deg, #E6C200, #FFD700);
+}
+
+/* Language menu */
+#langMenu {
+    display: none;
+    position: fixed;
+    top: 115px; /* Below header (60px) + menu bar (50px) + small gap (5px) */
+    right: 25px;
+    background: #001F3F;
+    color: #FFFFFF;
+    border-radius: 6px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    overflow: hidden;
+    z-index: 10001 !important; /* Above everything - header (2000), menu bar (3000) */
+    min-width: 120px;
+}
+
+#langMenu div {
+    padding: 10px 16px;
+    cursor: pointer;
+}
+
+#langMenu div:hover { background: #193857; }
+
+/* ------------------- MENU BAR ------------------- */
+.menu-bar {
+    position: fixed;
+    top: 60px;
+    width: 100%;
+    height: 50px;
+    background-color: #FFFFFF;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 3000;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+.menu-icon {
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    z-index: 3001;
+    position: relative;
+    pointer-events: auto;
+}
+
+.menu-icon:hover {
+    background: rgba(0, 31, 63, 0.1);
+}
+
+.menu-icon.open rect:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.menu-icon.open rect:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.menu-icon.open rect:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ------------------- SIDEBAR ------------------- */
+.sidebar {
+    height: 100vh;
+    width: 220px;
+    position: fixed;
+    top: 110px;
+    left: -220px;
+    background: linear-gradient(180deg, #001F3F, #193857);
+    color: #fff;
+    overflow-x: hidden;
+    transition: left 0.28s ease;
+    z-index: 1500;
+}
+
+.sidebar.open { left: 0; }
+
+.sidebar a {
+    display: block;
+    padding: 12px 20px;
+    text-decoration: none;
+    color: #fff;
+    font-size: 18px;
+}
+
+.sidebar a:hover { background-color: #193857; }
+
+/* ------------------- MAIN CONTENT ------------------- */
+.main-content {
+    margin-top: 110px; /* header + menu bar */
+    transition: margin-left 0.28s ease;
+    padding: 20px;
+}
+
+.main-content.shift { margin-left: 220px; }
+
+/* ------------------- VIDEO BANNER ------------------- */
+.video-banner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1200px;
+    height: calc(100vh - 125px);
+    padding: 0;
+}
+
+.video-card {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    transform-style: preserve-3d;
+    transform: none;
+    box-shadow: none;
+    border-radius: 0;
+    overflow: hidden;
+    background: #000;
+    display: flex;
+    transition: transform 0.55s cubic-bezier(.2,.9,.2,1), box-shadow 0.3s;
+}
+
+.video-card video {
+    width: 100%;
+    display: block;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+}
+
+@media(min-width: 1100px){
+    .video-banner{
+        height: calc(100vh - 125px); /* fill screen under header on large displays */
+        padding: 0;                  /* remove side padding so video can be wider */
+    }
+    .video-card{
+        width: 100%;
+        max-width: none;
+        height: 100%;
+        transform: none;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+        border-radius: 12px;
+    }
+    .video-card:hover{
+        transform: rotateX('0deg') rotateY('0deg') translateZ(30px) scale(1.02);
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.35);
+    }
+}
+
+/* ------------------- LISTINGS ------------------- */
+.vehicle-listings {
+    max-width: 1200px;      /* keep cards in a comfortable width */
+    margin: 40px auto 60px; /* space above/below section and center it */
+}
+
+.listings-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: space-between; /* even spacing between cards */
+}
+
+.card {
+    flex: 1 1 280px;
+    max-width: 360px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.card-image-container {
+    width: 100%;
+    height: 100px;
+    background: #F6F6F6;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card-details { padding: 15px; }
+
+.car-name { font-weight: bold; color: #001F3F; font-size: 18px; }
+.price { font-weight: bold; color: #001F3F; font-size: 22px; margin-top: 10px; }
+.view-details-btn { 
+    padding: 5px 10px; 
+    font-size: 12px; 
+    margin-top: 10px; 
+    cursor: pointer; 
+    text-decoration: none;
+    display: inline-block;
+}
+
+.card-details a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.add-vehicle-link {
+    text-decoration: none;
+    display: block;
+    color: inherit;
+}
+
+.add-vehicle-card {
+    border: 2px dashed #001F3F;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    height: 100%;
+}
+
+.add-vehicle-card:hover {
+    border-color: #193857;
+    background: #e6f0f4;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+}
+
+.add-icon {
+    font-size: 60px;
+    color: #001F3F;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.add-vehicle-card .car-name {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 4px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.listings-title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* ------------------- PAYMENT MODAL ------------------- */
+.payment-modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 20000;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment-modal-overlay.active {
+    display: flex;
+}
+
+.payment-modal {
+    background: #FFFFFF;
+    border-radius: 12px;
+    padding: 30px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    position: relative;
+    animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.payment-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #E6F0F4;
+}
+
+.payment-modal-header h2 {
+    color: #001F3F;
+    margin: 0;
+    font-size: 24px;
+}
+
+.payment-modal-close {
+    background: transparent;
+    border: none;
+    font-size: 28px;
+    color: #001F3F;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.payment-modal-close:hover {
+    background: #E6F0F4;
+    color: #193857;
+}
+
+.payment-form-group {
+    margin-bottom: 20px;
+}
+
+.payment-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #001F3F;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.payment-form-group input,
+.payment-form-group select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 15px;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.payment-form-group input:focus,
+.payment-form-group select:focus {
+    outline: none;
+    border-color: #001F3F;
+    box-shadow: 0 0 0 3px rgba(0, 31, 63, 0.1);
+}
+
+.payment-form-row {
+    display: flex;
+    gap: 15px;
+}
+
+.payment-form-row .payment-form-group {
+    flex: 1;
+}
+
+.payment-submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #001F3F, #193857);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.payment-submit-btn:hover {
+    background: linear-gradient(135deg, #193857, #001F3F);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 31, 63, 0.3);
+}
+
+.payment-submit-btn:active {
+    transform: translateY(0);
+}
+
+/* ------------------- BOOKING PREVIEW ------------------- */
+.booking-preview-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+.booking-title {
+    text-align: center;
+    color: #001F3F;
+    font-size: 28px;
+    margin-bottom: 30px;
+}
+
+.booking-section {
+    background: #FFFFFF;
+    border-radius: 10px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.booking-section h3 {
+    color: #001F3F;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #E6F0F4;
+}
+
+.vehicle-preview-card {
+    display: flex;
+    gap: 20px;
+    background: #F8F9FA;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.vehicle-preview-image {
+    width: 200px;
+    height: 150px;
+    background: #E6F0F4;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.vehicle-preview-details {
+    flex: 1;
+}
+
+.vehicle-preview-name {
+    font-size: 22px;
+    font-weight: bold;
+    color: #001F3F;
+    margin-bottom: 10px;
+}
+
+.vehicle-preview-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #001F3F;
+    margin-bottom: 15px;
+}
+
+.vehicle-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.spec-item {
+    background: #E6F0F4;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #001F3F;
+}
+
+.price-summary {
+    background: #F8F9FA;
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.price-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #E6F0F4;
+}
+
+.price-row:last-child {
+    border-bottom: none;
+}
+
+.total-row {
+    margin-top: 10px;
+    padding-top: 15px;
+    border-top: 2px solid #001F3F;
+    font-size: 18px;
+}
+
+.payment-methods {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.payment-method-card {
+    background: #F8F9FA;
+    border: 2px solid #E6F0F4;
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.payment-method-card:hover {
+    border-color: #001F3F;
+    background: #E6F0F4;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 31, 63, 0.1);
+}
+
+.payment-method-card.active {
+    border-color: #001F3F;
+    background: linear-gradient(135deg, #001F3F, #193857);
+    color: #FFFFFF;
+}
+
+.payment-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.payment-name {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.booking-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+.btn-primary {
+    padding: 14px 30px;
+    background: linear-gradient(135deg, #001F3F, #193857);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+    background: linear-gradient(135deg, #193857, #001F3F);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 31, 63, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-secondary {
+    padding: 14px 30px;
+    background: #E6F0F4;
+    color: #001F3F;
+    border: 2px solid #001F3F;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #001F3F;
+    color: #FFFFFF;
+}
+
+.pay-now-link {
+    text-decoration: none;
+    display: block;
+    width: 100%;
+}
+
+.payment-conditional-fields {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #E6F0F4;
+}
+
+.payment-amount {
+    background: #E6F0F4;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.payment-amount-label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.payment-amount-value {
+    font-size: 28px;
+    font-weight: bold;
+    color: #001F3F;
+}
