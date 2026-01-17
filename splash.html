@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Renture | Loading...</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #001F3F;
+      background-size: 400% 400%;
+      animation: gradientMove 10s ease infinite;
+      overflow: hidden;
+    }
+
+    /* Smooth background animation */
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Larger logo with glowing + floating animation */
+    .logo {
+      width: 350px; /* Increased size from 200px */
+      max-width: 80%;
+      animation: floatLogo 3.5s ease-in-out infinite, glowEffect 2.5s ease-in-out infinite;
+      filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+      transition: transform 0.3s ease-in-out;
+    }
+
+    /* Floating motion */
+    @keyframes floatLogo {
+      0% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-15px) scale(1.08); }
+      100% { transform: translateY(0) scale(1); }
+    }
+
+    /* Soft glowing pulse effect */
+    @keyframes glowEffect {
+      0%, 100% {
+        filter: drop-shadow(0 0 15px rgba(123, 51, 126, 0.6))
+                drop-shadow(0 0 30px rgba(102, 103, 171, 0.5));
+      }
+      50% {
+        filter: drop-shadow(0 0 35px rgba(245, 213, 224, 0.8))
+                drop-shadow(0 0 50px rgba(102, 103, 171, 0.8));
+      }
+    }
+  </style>
+</head>
+<body>
+  <!---<a href="index.html">Home</a>--->
+  <img src="images/Untitled_design-removebg-preview.png" alt="Renture Logo" class="logo" />
+
+  <script>
+    // Redirect to main page after 3.5 seconds
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 3500);
+  </script>
+</body>
+</html>
