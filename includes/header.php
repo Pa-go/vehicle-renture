@@ -1,7 +1,20 @@
 <!-- HEADER START -->
+<style>
+/* Inline fallback for header layout if main stylesheet fails to load */
+.header{display:flex;align-items:center;justify-content:space-between;color:#fff;padding:6px 12px;position:fixed;top:0;left:0;width:100%;background:#001F3F;height:60px;z-index:2000}
+.left-section{display:flex;align-items:center;gap:12px}
+.logo{height:60px}
+.search-box{display:flex;align-items:center;background:#193857;border-radius:20px;padding:6px 12px;height:38px}
+.search-box input{border:none;background:transparent;color:#fff;outline:none}
+.right-section{display:flex;align-items:center;gap:12px;margin-right:18px}
+.menu-bar{position:fixed;top:60px;width:100%;height:50px;background:#fff;z-index:3000;display:flex;align-items:center;padding-left:12px}
+.sidebar{height:100vh;width:220px;position:fixed;top:110px;left:-220px;background:#001F3F;color:#fff;transition:left .28s}
+.sidebar.open{left:0}
+.main-content{margin-top:110px;padding:16px}
+</style>
 <div class="header">
     <div class="left-section">
-        <img id="siteLogo" src="images/logo.png" class="logo" alt="Renture logo">
+        <img id="siteLogo" src="/Renture1/assets/images/logo.png" class="logo" alt="Renture logo">
         <div class="search-box">
             <input id="searchInput" type="text" placeholder="Search..." data-i18n-placeholder="search.placeholder">
         </div>
@@ -23,7 +36,7 @@
             <div role="button" onclick="selectLang('MR')" data-lang="MR">Marathi</div>
         </div>
 
-        <a id="loginBtn" class="login-btn" href="log_reg.html">Login</a>
+        <a id="loginBtn" class="login-btn" href="/Renture1/pages/log_reg.php">Login</a>
     </div>
 </div>
 
@@ -40,10 +53,10 @@
 
 <!-- SIDEBAR -->
 <div id="mySidebar" class="sidebar">
-    <a href="index.php" data-i18n="nav.home">Home</a>
-    <a href="lender.php" data-i18n="nav.lender">Lender</a>
-    <a href="tenant.php" data-i18n="nav.tenant">Tenant</a>
-    <a href="contact-feedback.php" data-i18n="nav.feedback">Feedback</a>
-    <a href="log_reg.php" data-i18n="nav.login">Login</a>
+    <a href="/Renture1/pages/home.php" data-i18n="nav.home">Home</a>
+    <a href="/Renture1/pages/lender.php" data-i18n="nav.lender">Lender</a>
+    <a href="/Renture1/pages/tenant.php" data-i18n="nav.tenant">Tenant</a>
+    <a href="/Renture1/pages/contact-feedback.php" data-i18n="nav.feedback">Feedback</a>
+    <a href="/Renture1/pages/log_reg.php" data-i18n="nav.login">Login</a>
 </div>
 <!-- HEADER END -->
