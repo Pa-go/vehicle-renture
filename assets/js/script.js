@@ -178,12 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Re-apply translations shortly after load in case some elements are added late
-    try {
-        const reapply = localStorage.getItem('renture_lang') || 'EN';
-        setTimeout(() => applyTranslations(reapply), 120);
-        setTimeout(() => applyTranslations(reapply), 600);
-    } catch (e) {}
-    
+        
     const sidebar = document.getElementById('mySidebar');
     const main = document.getElementById('mainContent');
     const menuIcon = document.querySelector('.menu-icon');
