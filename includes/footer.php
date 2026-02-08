@@ -21,11 +21,11 @@
         <div style="flex:1; min-width:200px;">
             <h3 style="margin-bottom:15px; font-weight:600;">Quick Links</h3>
             <ul style="list-style:none; padding:0; line-height:1.8;">
-                <li><a href="home.php" style="color:#fff; text-decoration:none;">Home</a></li>
-                <li><a href="lender.php" style="color:#fff; text-decoration:none;">Lender</a></li>
-                <li><a href="tenant.php" style="color:#fff; text-decoration:none;">Tenant</a></li>
-                <li><a href="contact-feedback.php" style="color:#fff; text-decoration:none;">Feedback</a></li>
-                <li><a href="log_reg.html" style="color:#fff; text-decoration:none;">Login / Register</a></li>
+                <li><a href="../pages/home.php" style="color:#fff; text-decoration:none;">Home</a></li>
+                <li><a href="../pages/lender.php" style="color:#fff; text-decoration:none;">Lender</a></li>
+                <li><a href="../pages/tenant.php" style="color:#fff; text-decoration:none;">Tenant</a></li>
+                <li><a href="../pages/contact-feedback.php" style="color:#fff; text-decoration:none;">Feedback</a></li>
+                <li><a href="../pages/log_reg.php" style="color:#fff; text-decoration:none;">Login / Register</a></li>
             </ul>
         </div>
 
