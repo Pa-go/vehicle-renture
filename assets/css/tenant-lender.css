@@ -1,0 +1,39 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #6667AB;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 30px;
+}
+
+h1, h2 {
+    text-align: center;
+    font-weight: 600;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.15);
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 12px;
+}
+
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+    color: #6667AB;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #f2f2f2;
+}

@@ -9,11 +9,13 @@ $mysqli = new mysqli("localhost", "root", "", "renture");
 if ($mysqli->connect_error) {
     die("DB connect error: " . $mysqli->connect_error);
 }
-
-function alert_and_back($msg) {
-    echo "<script>alert(" . json_encode($msg) . "); window.history.back();</script>";
-    exit();
-}
+    function alert_and_back($msg) {
+        echo "<script>";
+        echo "alert(" . json_encode($msg) . ");";
+        echo "window.history.back();";
+        echo "</script>";
+        exit();
+    }
 
 /* ------------------ REGISTRATION ------------------ */
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['register'])) {

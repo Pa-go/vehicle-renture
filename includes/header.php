@@ -1,3 +1,6 @@
+<?php
+$BASE_URL="/vehicle-renture";
+?>
 <!-- HEADER START -->
 <style>
 /* Inline fallback for header layout if main stylesheet fails to load */
@@ -53,10 +56,10 @@
 
 <!-- SIDEBAR -->
 <div id="mySidebar" class="sidebar">
-    <a href="/Renture1/pages/home.php" data-i18n="nav.home">Home</a>
-    <a href="/Renture1/pages/lender.php" data-i18n="nav.lender">Lender</a>
-    <a href="/Renture1/pages/tenant.php" data-i18n="nav.tenant">Tenant</a>
-    <a href="/Renture1/pages/contact-feedback.php" data-i18n="nav.feedback">Feedback</a>
-    <a href="/Renture1/pages/log_reg.php" data-i18n="nav.login">Login</a>
+    <a href="home.php">Home</a>
+    <a href="lender.php">Lender</a>
+    <a href="tenant.php">Tenant</a>
+    <a href="contact-feedback.php">Feedback</a>
+    <a href="/vehicle-renture/pages/login-register.php">Login</a>
 </div>
 <!-- HEADER END -->

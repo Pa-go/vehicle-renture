@@ -4,7 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tenant Cars Listing | Renture</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href=""style.css>
+    
     <style>
       * {
         margin: 0;
@@ -13,7 +14,7 @@
       }
 
       body {
-        font-family: "Poppins",sans-serif;
+        font-family:"Poppins",sans-serif;
         font-style:italic;
         background-color: #6667ab;
         color: #333;
@@ -32,13 +33,13 @@
       }
 
       .header-section h1 {
-        color:rgb(246, 247, 248);
+        color: white;
         font-size: 32px;
         margin-bottom: 10px;
       }
 
       .header-section p {
-        color:rgb(246, 247, 248) ;
+        color: white;
         font-size: 16px;
       }
 
@@ -69,7 +70,7 @@
       .filter-sort-section select:focus,
       .filter-sort-section input:focus {
         outline: none;
-        border-color:rgb(245, 247, 248);
+        border-color: #001f3f;
         background-color: #fff;
       }
 
@@ -82,7 +83,7 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        color:rgb(248, 250, 253);
+        color: #001f3f;
         font-weight: 600;
       }
 
@@ -111,7 +112,7 @@
       .car-image {
         width: 100%;
         height: 200px;
-        background: linear-gradient(135deg,rgb(228, 232, 250) 0%, rgb(228,232,250));
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         display: flex;
         align-items: center;
         justify-content: center;
