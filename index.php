@@ -25,10 +25,10 @@
     // After 3.5s navigate to the main page. Use replace so splash isn't kept in history.
     setTimeout(function () {
       try {
-        window.location.replace('home.php');
+        window.location.replace('../pages/home.php');
       } catch (e) {
         // as a fallback, set href
-        window.location.href = 'home.php';
+        window.location.href = '../pages/home.php';
       }
     }, 3500);
   </script>
