@@ -24,7 +24,7 @@ if (isset($_POST['feedback_submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact & Feedback | Renture</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .wrapper { max-width: 900px; margin: 0 auto 40px; }
         .box { background: #fff; padding: 25px; border-radius: 10px; margin-bottom: 40px; box-shadow: 0 0 15px rgba(0,0,0,0.1); }
@@ -41,7 +41,7 @@ if (isset($_POST['feedback_submit'])) {
 <!-- Temporary Message Box -->
 <div id="messageBox" style="display:none;position:fixed;top:10px;right:10px;background:#001F3F;color:#fff;padding:8px 12px;border-radius:6px;z-index:10000;font-family:Arial, sans-serif;"></div>
 
-<?php include 'header.php'; ?>
+<?php include '../includes/header.php'; ?>
 
 <div id="mainContent" class="main-content">
 <div class="wrapper">
@@ -92,7 +92,7 @@ if (isset($_POST['feedback_submit'])) {
 </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 <script src="script.js"></script>
 </body>
 </html>

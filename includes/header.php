@@ -14,7 +14,7 @@
 </style>
 <div class="header">
     <div class="left-section">
-        <img id="siteLogo" src="/Renture1/assets/images/logo.png" class="logo" alt="Renture logo">
+        <img id="siteLogo" src="../assets/images/logo.png" class="logo" alt="Renture logo">
         <div class="search-box">
             <input id="searchInput" type="text" placeholder="Search..." data-i18n-placeholder="search.placeholder">
         </div>
@@ -36,7 +36,7 @@
             <div role="button" onclick="selectLang('MR')" data-lang="MR">Marathi</div>
         </div>
 
-        <a id="loginBtn" class="login-btn" href="/Renture1/pages/log_reg.php">Login</a>
+        <a id="loginBtn" class="login-btn" href="/vehicle-renture/pages/login-register.php">Login</a>
     </div>
 </div>
 

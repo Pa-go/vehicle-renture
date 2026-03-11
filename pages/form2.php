@@ -66,7 +66,7 @@
 <!-- Temporary Message Box -->
 <div id="messageBox" style="display:none;position:fixed;top:10px;right:10px;background:#001F3F;color:#fff;padding:8px 12px;border-radius:6px;z-index:10000;font-family:Arial, sans-serif;"></div>
 
-<?php include 'header.php'; ?>
+<?php include '../includes/header.php'; ?>
 
 <div id="mainContent" class="main-content">
 
@@ -171,7 +171,7 @@
 
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../includes/footer.php'; ?>
 <script src="script.js"></script>
 </body>
 </html>
