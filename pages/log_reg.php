@@ -1,8 +1,76 @@
+<?php
+session_start();
+// Step 1: Link to database (climbing out of 'pages' folder)
+include '../database/db_config.php'; 
+
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // --- REGISTRATION LOGIC ---
+    if (isset($_POST['register'])) {
+        // Matching Capitalized names from your HTML
+        $name     = $_POST['Name'];
+        $age      = $_POST['Age'];
+        $contact  = $_POST['Contact'];
+        $address  = $_POST['Address'];
+        $email    = $_POST['Email'];
+        $dob      = $_POST['DOB'];
+        // Hash the password for security
+        $password = password_hash($_POST['Password'], PASSWORD_BCRYPT);
+
+        try {
+            $sql = "INSERT INTO users (name, email, password, age, contact, address, dob) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("sssisss", $name, $email, $password, $age, $contact, $address, $dob);
+            
+            if ($stmt->execute()) {
+                // Success: Alert and stay on page to allow login
+                echo "<script>alert('Registration Successful! You can now Login.');</script>";
+            }
+        } catch (mysqli_sql_exception $e) {
+            if ($e->getCode() == 1062) {
+                $message = "Error: This email is already registered.";
+            } else {
+                $message = "Registration failed. Please try again.";
+            }
+        }
+    }
+
+    // --- LOGIN LOGIC ---
+    if (isset($_POST['login'])) {
+        $email = $_POST['Email'];
+        $pass  = $_POST['Password'];
+
+        $sql = "SELECT id, name, password FROM users WHERE email = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        if ($user = $result->fetch_assoc()) {
+            // Verify the hashed password
+            if (password_verify($pass, $user['password'])) {
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['user_name'] = $user['name'];
+                
+                // Redirecting out of 'pages' to root home.php
+                header("Location: ../pages/home.php");
+                exit();
+            } else {
+                $message = "Invalid Password!";
+            }
+        } else {
+            $message = "No account found with this email.";
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-
 <style>
 /* Global Reset */
 * { box-sizing: border-box; }
@@ -43,11 +111,7 @@ button {
 }
 
 button:active { transform: scale(0.95); }
-button.ghost {
-  background-color: transparent;
-  border-color: #FFFFFF;
-  color: #FFFFFF;
-}
+button.ghost { background-color: transparent; border-color: #FFFFFF; color: #FFFFFF; }
 
 form {
   background-color: #FFFFFF;
@@ -58,7 +122,7 @@ form {
   justify-content: center;
   align-items: center;
   text-align: center;
-  gap: 8px; /* Compact gap to fit all fields without scroll */
+  gap: 8px;
 }
 
 input {
@@ -92,7 +156,7 @@ input {
   overflow: hidden;
   width: 850px;
   max-width: 95%;
-  min-height: 600px; /* Increased height slightly for more fields */
+  min-height: 600px;
 }
 
 .form-container {
@@ -166,7 +230,6 @@ input {
 button:hover { background-color: #001F3F; color: #FFD700; border-color: #001F3F; }
 button.ghost:hover { background-color: #FFFFFF; color: #001F3F; }
 
-/* Validation Error Style */
 .error-msg {
   color: #ff4d4d;
   font-size: 11px;
@@ -177,15 +240,19 @@ button.ghost:hover { background-color: #FFFFFF; color: #001F3F; }
 </head>
 <body>
 
+<?php if($message != ""): ?>
+    <script>alert("<?php echo $message; ?>");</script>
+<?php endif; ?>
+
 <div class="container" id="container">
 
   <div class="form-container login-container">
-    <form action="login-register.php" method="post" id="loginForm">
+    <form action="" method="post" id="loginForm">
       <h1>Login</h1>
       <input type="email" name="Email" placeholder="Email" required />
       <input type="password" name="Password" placeholder="Password" required />
       <a href="#" style="font-size: 11px; text-decoration: none; color: #001F3F; align-self: flex-start;">Forgot your password?</a>
-      <button name="login">Login</button>
+      <button name="login" type="submit">Login</button>
       <div class="social-container">
         <a href="#">F</a><a href="#">G+</a><a href="#">In</a>
       </div>
@@ -193,25 +260,18 @@ button.ghost:hover { background-color: #FFFFFF; color: #001F3F; }
   </div>
 
   <div class="form-container register-container">
-    <form action="login-register.php" method="post" id="regForm">
+    <form action="" method="post" id="regForm">
       <h1 style="margin-bottom: 10px;">Create Account</h1>
-      
       <input type="text" name="Name" placeholder="Name" required />
       <input type="number" name="Age" placeholder="Age" max="100" min="1" required />
-      
       <input type="tel" name="Contact" id="contact" placeholder="Contact (10 digits)" pattern="[0-9]{10}" required />
-      
-      <input type="text" name="Address" placeholder="Address" required />
+      <input type="text" name="Address" placeholder="Address" required /> 
       <input type="email" name="Email" placeholder="Email" required />
-      
       <input type="password" name="Password" id="regPass" placeholder="Password" required minlength="6" />
       <input type="password" name="ConfirmPassword" id="confirmPass" placeholder="Confirm Password" required />
       <div id="passError" class="error-msg">Passwords do not match!</div>
-      
       <input type="date" name="DOB" required />
-
       <button name="register" type="submit">Register</button>
-
       <div class="social-container">
         <a href="#">F</a><a href="#">G+</a><a href="#">In</a>
       </div>
@@ -250,15 +310,11 @@ const confirmPassword = document.getElementById('confirmPass');
 const passError = document.getElementById('passError');
 
 regForm.onsubmit = function(e) {
-  // Password Matching Check
   if (password.value !== confirmPassword.value) {
     passError.style.display = 'block';
     confirmPassword.style.border = '1px solid #ff4d4d';
-    e.preventDefault(); // Stop form submission
+    e.preventDefault(); 
     return false;
-  } else {
-    passError.style.display = 'none';
-    confirmPassword.style.border = '1px solid #FFD700';
   }
 };
 </script>

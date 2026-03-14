@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehicle Details | Renture</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <style>
         .form-container {
             max-width: 700px;
@@ -25,6 +25,7 @@
         }
         input[type="text"],
         input[type="number"],
+        input[type="file"], /* Added styling for file input */
         textarea,
         select {
             width: 100%;
@@ -59,11 +60,13 @@
         .submit-button:hover {
             background: linear-gradient(135deg, #193857, #001F3F);
         }
+        a {
+           text-decoration: none;
+        }
     </style>
 </head>
 <body>
 
-<!-- Temporary Message Box -->
 <div id="messageBox" style="display:none;position:fixed;top:10px;right:10px;background:#001F3F;color:#fff;padding:8px 12px;border-radius:6px;z-index:10000;font-family:Arial, sans-serif;"></div>
 
 <?php include '../includes/header.php'; ?>
@@ -72,7 +75,7 @@
 
 <div class="form-container">
     <h2>🚗 Vehicle Details</h2>
-    <form action="/submit-vehicle-data" method="POST">
+    <form action="../submit-vehicle-data.php" method="POST" enctype="multipart/form-data">
 
         <div class="form-group">
             <label for="vehicle-name">1. Name of Vehicle:</label>
@@ -164,14 +167,19 @@
             </select>
         </div>
 
-        <button type="submit" class="submit-button">Submit Vehicle Details</button>
+        <div class="form-group">
+            <label for="vehicle-image">15. Upload Vehicle Image:</label>
+            <input type="file" id="vehicle-image" name="vehicle_image" accept="image/*" required>
+        </div>
 
+        <button type="submit" class="submit-button">Submit Vehicle Details</button>
+ 
     </form>
 </div>
 
 </div>
 
 <?php include '../includes/footer.php'; ?>
-<script src="script.js"></script>
+<script src="../assets/js/script.js"></script>
 </body>
 </html>

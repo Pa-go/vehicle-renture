@@ -83,18 +83,6 @@
                     </a>
                 </div>
             </div>
-            
-            <!-- Add New Vehicle Card -->
-            <a href="/Renture1/pages/form2.php" class="add-vehicle-link">
-                <div class="card add-vehicle-card">
-                    <div class="card-image-container">
-                        <span class="add-icon">+</span>
-                    </div>
-                    <div class="card-details">
-                        <p class="car-name">Add New Vehicle</p>
-                    </div>
-                </div>
-            </a>
         </div>
     </section>
 

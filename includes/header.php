@@ -1,63 +1,95 @@
-<!-- HEADER START -->
+<?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+$isLoggedIn = isset($_SESSION['user_id']);
+$userName = $isLoggedIn ? $_SESSION['user_name'] : "";
+?>
 <style>
-/* Inline fallback for header layout if main stylesheet fails to load */
-.header{display:flex;align-items:center;justify-content:space-between;color:#fff;padding:6px 12px;position:fixed;top:0;left:0;width:100%;background:#001F3F;height:60px;z-index:2000}
-.left-section{display:flex;align-items:center;gap:12px}
-.logo{height:60px}
-.search-box{display:flex;align-items:center;background:#193857;border-radius:20px;padding:6px 12px;height:38px}
-.search-box input{border:none;background:transparent;color:#fff;outline:none}
-.right-section{display:flex;align-items:center;gap:12px;margin-right:18px}
-.menu-bar{position:fixed;top:60px;width:100%;height:50px;background:#fff;z-index:3000;display:flex;align-items:center;padding-left:12px}
-.sidebar{height:100vh;width:220px;position:fixed;top:110px;left:-220px;background:#001F3F;color:#fff;transition:left .28s}
-.sidebar.open{left:0}
-.main-content{margin-top:110px;padding:16px}
+/* 1. LAYERING FIX: Sidebar must be higher than everything else */
+.header {
+    display:flex; align-items:center; justify-content:space-between; color:#fff; padding:6px 12px; 
+    position:fixed; top:0; left:0; width:100%; background:#001F3F; height:60px; z-index:2000;
+}
+.menu-bar {
+    position:fixed; top:60px; width:100%; height:50px; background:#fff; 
+    z-index:1500; /* Lowered so sidebar can go OVER it */
+    display:flex; align-items:center; padding-left:12px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    left: -220px; /* Hidden state */
+    width: 220px !important;
+    height: 100vh !important;
+    background: #001F3F !important;
+    z-index: 9999 !important; /* This puts it ABOVE the car image */
+    transition: left 0.3s ease;
+    display: block !important; /* Ensure it's not set to display:none */
+}
+
+.sidebar.open {
+    left:0 !important;
+}
+.sidebar a { display:block; color:white; padding:15px 25px; text-decoration:none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar a:hover { background: #193857; }
+
+/* 2. Style for login/account button */
+.login-btn { background:#FFD700; color:#001F3F; padding:8px 15px; border-radius:20px; text-decoration:none; font-weight:bold; }
 </style>
+
 <div class="header">
     <div class="left-section">
-        <img id="siteLogo" src="../assets/images/logo.png" class="logo" alt="Renture logo">
-        <div class="search-box">
-            <input id="searchInput" type="text" placeholder="Search..." data-i18n-placeholder="search.placeholder">
+        <img id="siteLogo" src="../assets/images/logo.png" class="logo" alt="Renture logo" style="height:60px;">
+        <div class="search-box" style="display:flex; align-items:center; background:#193857; border-radius:20px; padding:6px 12px;">
+            <input id="searchInput" type="text" placeholder="Search..." style="border:none; background:transparent; color:#fff; outline:none;">
         </div>
     </div>
 
-    <div class="right-section">
-        <button id="languageIcon" class="icon" aria-haspopup="true" aria-expanded="false" aria-controls="langMenu" title="Change language">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"
-                      stroke="#FFFFFF" stroke-width="1.2" />
-                <path d="M2 12h20M12 2c2.5 2.5 4 6 4 10s-1.5 7.5-4 10M12 2C9.5 4.5 8 8 8 12s1.5 7.5 4 10"
-                      stroke="#FFFFFF" stroke-width="0.9" opacity="0.9"/>
-            </svg>
-        </button>
-
-        <div id="langMenu">
-            <div role="button" onclick="selectLang('EN')" data-lang="EN">English</div>
-            <div role="button" onclick="selectLang('HI')" data-lang="HI">Hindi</div>
-            <div role="button" onclick="selectLang('MR')" data-lang="MR">Marathi</div>
-        </div>
-
-        <a id="loginBtn" class="login-btn" href="/vehicle-renture/pages/login-register.php">Login</a>
+    <div class="right-section" style="display:flex; align-items:center; gap:12px;">
+        <?php if ($isLoggedIn): ?>
+            <a class="login-btn" href="profile.php">Hi, <?php echo htmlspecialchars(explode(' ', $userName)[0]); ?></a>
+        <?php else: ?>
+            <a class="login-btn" href="../pages/log_reg.php">Login</a>
+        <?php endif; ?>
     </div>
 </div>
 
-<!-- HAMBURGER MENU BAR -->
 <div class="menu-bar">
-    <button type="button" id="menuToggle" class="menu-icon" aria-label="Toggle menu">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
-            <rect y="4" width="24" height="2" rx="1" fill="#001F3F"/>
-            <rect y="11" width="24" height="2" rx="1" fill="#001F3F"/>
-            <rect y="18" width="24" height="2" rx="1" fill="#001F3F"/>
-        </svg>
-    </button>
+    <button type="button" onclick="forceOpenSidebar(event)" style="background:none; border:none; cursor:pointer; z-index: 6000;">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none">
+        <rect y="4" width="24" height="2" rx="1" fill="#001F3F"/>
+        <rect y="11" width="24" height="2" rx="1" fill="#001F3F"/>
+        <rect y="18" width="24" height="2" rx="1" fill="#001F3F"/>
+    </svg>
+</button>
 </div>
 
-<!-- SIDEBAR -->
 <div id="mySidebar" class="sidebar">
-    <a href="home.php">Home</a>
+    <div style="text-align:right; padding:10px;"><button id="closeBtn" style="color:white; background:none; border:none; font-size:24px; cursor:pointer;">&times;</button></div>
+    <a href="../home.php">Home</a>
     <a href="lender.php">Lender</a>
     <a href="tenant.php">Tenant</a>
     <a href="contact-feedback.php">Feedback</a>
-    <a href="/vehicle-renture/pages/login-register.php">Login</a>
+    <?php if ($isLoggedIn): ?>
+        <a href="../pages/logout.php" style="color:#FFD700;">Logout</a>
+    <?php else: ?>
+        <a href="../pages/log_reg.php">Login</a>
+    <?php endif; ?>
 </div>
 
-<!-- HEADER END -->
+<script>
+function forceOpenSidebar(e) {
+    e.preventDefault();
+    e.stopPropagation(); // Stops other scripts from hearing this click
+    
+    var side = document.getElementById('mySidebar');
+    side.style.left = "0px"; // Force position
+    side.classList.add('open');
+    console.log("FORCE OPEN EXECUTED");
+}
+
+// Ensure the sidebar CSS is forced
+document.getElementById('mySidebar').style.zIndex = "9999";
+</script>
