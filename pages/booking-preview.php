@@ -4,26 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Booking Preview | Renture</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
+    <style>
+body{
+    margin:0;
+    padding-top:130px;
+    font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background:#E6F0F4;
+}
+
+.main-content{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
+.vehicle-preview-image img{
+    width:180px;
+    height:120px;
+    object-fit:cover;
+    border-radius:8px;
+    background: #ccc; /* Adds a gray background if image takes a second to load */
+}
+</style>
 </head>
 <body>
 
-<!-- Temporary Message Box -->
 <div id="messageBox" style="display:none;position:fixed;top:10px;right:10px;background:#001F3F;color:#fff;padding:8px 12px;border-radius:6px;z-index:10000;font-family:Arial, sans-serif;"></div>
 
-<?php include 'header.php'; ?>
-
 <div id="mainContent" class="main-content">
-
+<?php
+session_start();
+include __DIR__ . '/../includes/header.php';
+?>
     <div class="booking-preview-container">
         <h2 class="booking-title">📋 Booking Preview</h2>
         
-        <!-- Selected Vehicle Details -->
         <div class="booking-section">
             <h3>🚗 Selected Vehicle</h3>
             <div class="vehicle-preview-card" id="vehiclePreview">
                 <div class="vehicle-preview-image">
-                    <span class="image-placeholder">[Vehicle Image]</span>
+                    <img id="vehicleImage" src="https://placehold.co/400x250?text=Loading..." alt="Vehicle Image">
                 </div>
                 <div class="vehicle-preview-details">
                     <p class="vehicle-preview-name" id="vehicleName">Toyota Camry Hybrid</p>
@@ -37,7 +57,6 @@
             </div>
         </div>
 
-        <!-- Booking Summary -->
         <div class="booking-section">
             <h3>💰 Price Summary</h3>
             <div class="price-summary">
@@ -60,7 +79,6 @@
             </div>
         </div>
 
-        <!-- Payment Method Selection -->
         <div class="booking-section">
             <h3>💳 Select Payment Method</h3>
             <div class="payment-methods">
@@ -83,7 +101,6 @@
             </div>
         </div>
 
-        <!-- Action Buttons -->
         <div class="booking-actions">
             <button class="btn-secondary" onclick="window.history.back()">← Back</button>
             <button class="btn-primary" id="proceedToPaymentBtn" onclick="proceedToPayment()" disabled>Proceed to Payment</button>
@@ -92,23 +109,39 @@
 
 </div>
 
-<?php include 'payment-modal.php'; ?>
-<?php include 'footer.php'; ?>
-<script src="script.js"></script>
+<?php include __DIR__ . '/../pages/payment-modal.php'; ?>
+<?php include __DIR__ . '/../includes/footer.php'; ?>
+<script src="../assets/js/script.js"></script>
 <script>
 // Get vehicle details from URL parameters
 const urlParams = new URLSearchParams(window.location.search);
-const vehicleName = urlParams.get('name') || 'Toyota Camry Hybrid';
-const vehiclePrice = parseFloat(urlParams.get('price')) || 40000;
-const vehicleBrand = urlParams.get('brand') || 'Toyota';
-const vehicleModel = urlParams.get('model') || 'Camry';
-const vehicleType = urlParams.get('type') || 'Car';
+const vehicleName = urlParams.get('name') || 'Unnamed Vehicle';
+const vehiclePrice = parseFloat(urlParams.get('price')) || 0;
+const vehicleBrand = urlParams.get('brand') || 'N/A';
+const vehicleModel = urlParams.get('model') || 'N/A';
+const vehicleType = urlParams.get('type') || 'Vehicle';
+const vehicleImage = urlParams.get('image');
 
 // Update page with vehicle details
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // IMAGE FIX: Safely grab the image from the URL and apply it
+    const imgElement = document.getElementById("vehicleImage");
+    if (vehicleImage && vehicleImage !== 'undefined') {
+        imgElement.src = decodeURIComponent(vehicleImage);
+    } else {
+        imgElement.src = 'https://placehold.co/400x250?text=No+Image+Available';
+    }
+
+    // In case the image link is broken, fall back to a missing image placeholder
+    imgElement.onerror = function() {
+        this.src = 'https://placehold.co/400x250?text=Image+Missing';
+    };
+
+    // Text Details
     document.getElementById('vehicleName').textContent = vehicleName;
-    document.getElementById('vehiclePrice').textContent = '$' + vehiclePrice.toLocaleString();
-    document.getElementById('basePrice').textContent = '$' + vehiclePrice.toLocaleString();
+    document.getElementById('vehiclePrice').textContent = '₹' + vehiclePrice.toLocaleString();
+    document.getElementById('basePrice').textContent = '₹' + vehiclePrice.toLocaleString();
     document.getElementById('vehicleBrand').textContent = 'Brand: ' + vehicleBrand;
     document.getElementById('vehicleModel').textContent = 'Model: ' + vehicleModel;
     document.getElementById('vehicleType').textContent = 'Type: ' + vehicleType;
@@ -118,9 +151,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const serviceFee = 500;
     const total = vehiclePrice + tax + serviceFee;
 
-    document.getElementById('taxAmount').textContent = '$' + tax.toLocaleString();
-    document.getElementById('serviceFee').textContent = '$' + serviceFee.toLocaleString();
-    document.getElementById('totalAmount').innerHTML = '<strong>$' + total.toLocaleString() + '</strong>';
+    document.getElementById('taxAmount').textContent = '₹' + tax.toLocaleString();
+    document.getElementById('serviceFee').textContent = '₹' + serviceFee.toLocaleString();
+    document.getElementById('totalAmount').innerHTML = '<strong>₹' + total.toLocaleString() + '</strong>';
 
     // Store total for payment modal
     window.bookingTotal = total;
@@ -155,7 +188,7 @@ function proceedToPayment() {
 
     // Open payment modal with total amount first
     if (typeof openPaymentModal === 'function') {
-        openPaymentModal(window.bookingTotal || 44500);
+        openPaymentModal(window.bookingTotal || 0);
         
         // Set payment method in modal after a short delay to ensure modal is open
         setTimeout(() => {
