@@ -42,223 +42,233 @@ $json_vehicles = json_encode($db_vehicles);
 <link rel="stylesheet" href="../assets/css/style.css">
 <style>
     body {
-        padding-top: 130px; 
-        background: #f4f6f9;
-    }
+    padding-top: 130px;
+    background: #E6F0F4;
+    font-family: 'Poppins', sans-serif;
+}
 
-    .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 25px;
-        padding: 20px;
-    }
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    padding: 30px;
+}
 
-    .card {
-        background: white;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        display: flex;
-        flex-direction: column; 
-        height: 100%; 
-        border: 1px solid #eee;
-    }
+/* CARD - MODERN PINTEREST STYLE */
+.card {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 10px 25px rgba(0, 31, 63, 0.15);
+    transition: all 0.3s ease;
+}
 
-    .card-img {
-        width: 100%;
-        height: 200px;
-        background: #f8f9fa;
-        position: relative;
-    }
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 31, 63, 0.25);
+}
 
-    .card-img img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover; 
-    }
+/* IMAGE */
+.card-img {
+    width: 100%;
+    height: 220px;
+    position: relative;
+    overflow: hidden;
+}
 
-    .badge {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        padding: 5px 12px;
-        border-radius: 5px;
-        color: white;
-        font-weight: bold;
-        font-size: 12px;
-        z-index: 10;
-    }
+.card-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
 
-    .card-body {
-        padding: 15px;
-        flex-grow: 1; 
-        display: flex;
-        flex-direction: column;
-    }
+.card:hover .card-img img {
+    transform: scale(1.1);
+}
 
-    .card-body h4 { margin: 0 0 5px 0; text-transform: capitalize; }
-    
-    .price-tag { 
-        font-size: 20px; 
-        font-weight: bold; 
-        color: #1e2a4a; 
-        margin: 10px 0; 
-    }
+/* BADGE */
+.badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #FFFFFF;
+    background: #001F3F;
+}
 
-    .btn-group {
-        display: flex;
-        gap: 10px;
-        margin-top: auto; 
-    }
+/* BODY */
+.card-body {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+}
 
-    .btn {
-        flex: 1;
-        padding: 10px;
-        border-radius: 6px;
-        border: none;
-        font-weight: bold;
-        cursor: pointer;
-        transition: opacity 0.2s ease;
-    }
+/* TITLE */
+.card-body h4 {
+    margin: 0;
+    font-size: 18px;
+    color: #001F3F;
+}
 
-    .btn:hover { opacity: 0.85; }
-    .btn-details { background: #f0f2f5; color: #333; }
-    .btn-book { background: #1e2a4a; color: white; }
-    .btn-book:disabled { background: #ccc; cursor: not-allowed; opacity: 1; }
-    
-    .page-title {
-        text-align: center;
-        padding: 30px 20px 10px;
-    }
-    
-    .page-title h1 {
-        margin: 0;
-        color: #1e2a4a;
-        font-size: 28px;
-    }
-    
-    .page-title p {
-        color: #666;
-        margin-top: 10px;
-    }
+/* SUBTEXT */
+.card-body small {
+    color: #193857;
+    margin-top: 4px;
+}
 
-    .filter-box {
-        display: flex;
-        justify-content: center;
-        gap: 15px;
-        margin: 20px 0;
-        align-items: center;
-    }
+/* PRICE */
+.price-tag {
+    font-size: 22px;
+    font-weight: bold;
+    color: #001F3F;
+    margin: 12px 0;
+}
 
-    .filter-box select {
-        padding: 8px 12px;
-        border-radius: 8px;
-        border: 1px solid #ddd;
-        font-size: 14px;
-        cursor: pointer;
-    }
+/* BUTTONS */
+.btn-group {
+    display: flex;
+    gap: 10px;
+    margin-top: auto;
+}
 
-    /* POPUP STYLES */
-    .popup {
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.6);
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
+.btn {
+    flex: 1;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.3s ease;
+}
 
-    .popup-content {
-        background: white;
-        width: 750px;
-        max-width: 95%;
-        border-radius: 15px;
-        padding: 20px;
-        position: relative;
-        max-height: 90vh;
-        overflow-y: auto;
-    }
+/* DETAILS BUTTON */
+.btn-details {
+    background: transparent;
+    border: 1px solid #001F3F;
+    color: #001F3F;
+}
 
-    .close-btn {
-        position: absolute;
-        top: 10px; right: 20px;
-        font-size: 32px;
-        font-weight: bold;
-        color: #333;
-        cursor: pointer;
-        z-index: 10000;
-        line-height: 1;
-    }
-    .close-btn:hover { color: red; }
+.btn-details:hover {
+    background: #001F3F;
+    color: #FFFFFF;
+}
 
-    .popup-body {
-        display: flex;
-        gap: 20px;
-        align-items: flex-start;
-        margin-top: 10px;
-    }
+/* BOOK BUTTON */
+.btn-book {
+    background: #FFD700;
+    color: #001F3F;
+}
 
-    .popup-img {
-        position: relative;
-        width: 300px;
-        flex-shrink: 0;
-    }
+.btn-book:hover {
+    background: #e6c200;
+    transform: scale(1.05);
+}
 
-    .popup-img img {
-        width: 100%;
-        border-radius: 10px;
-    }
+.btn-book:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
 
-    .popup-details {
-        flex: 1; 
-        max-height: 450px; 
-        overflow-y: auto; 
-        padding-right: 15px;
-    }
+/* PAGE TITLE */
+.page-title {
+    text-align: center;
+    padding: 30px 20px 10px;
+}
 
-    .popup-details h2 {
-        margin-top: 0;
-        margin-bottom: 5px;
-    }
+.page-title h1 {
+    margin: 0;
+    color: #001F3F;
+    font-size: 30px;
+}
 
-    .info-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 6px;
-        margin: 10px 0;
-    }
+.page-title p {
+    color: #193857;
+    margin-top: 10px;
+}
 
-    .info-item {
-        font-size: 13px;
-        color: #444;
-    }
+/* FILTER */
+.filter-box {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 20px 0;
+    align-items: center;
+}
 
-    .info-item b { color: #1e2a4a; }
+.filter-box label {
+    color: #001F3F;
+    font-weight: 500;
+}
 
-    .contact-btn {
-        background: #ffd400;
-        border: none;
-        padding: 12px 20px;
-        border-radius: 25px;
-        font-weight: bold;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 20px;
-        text-align: center;
-        font-size: 14px;
-        transition: background 0.2s ease;
-    }
-    .contact-btn:hover { background: #e6c000; }
+.filter-box select {
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,31,63,0.2);
+    background: rgba(255,255,255,0.6);
+    cursor: pointer;
+}
 
-    .no-vehicles {
-        text-align: center;
-        padding: 60px 20px;
-        color: #888;
-        font-size: 16px;
-        grid-column: 1 / -1;
-    }
+/* POPUP */
+.popup {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,31,63,0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+/* POPUP CONTENT */
+.popup-content {
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 20px;
+    width: 750px;
+    max-width: 95%;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+/* POPUP TEXT */
+.popup-details h2 {
+    color: #001F3F;
+}
+
+.popup-details h3 {
+    color: #FFD700 !important;
+}
+
+/* CONTACT BUTTON */
+.contact-btn {
+    background: #FFD700;
+    border: none;
+    padding: 12px;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+    color: #001F3F;
+}
+
+.contact-btn:hover {
+    background: #e6c200;
+}
+
+/* EMPTY */
+.no-vehicles {
+    text-align: center;
+    padding: 60px;
+    color: #193857;
+}
 </style>
 </head>
 
@@ -473,7 +483,7 @@ function openPopup(vehicle) {
     const isAvail = (vehicle.availability === "Available" || vehicle.availability == 1);
     const badge = document.getElementById("popupBadge");
     badge.innerText = isAvail ? "Available" : "Unavailable";
-    badge.style.background = isAvail ? "#28a745" : "#dc3545";
+    badge.style.background = isAvail ? "#001F3F" : "#193857";
 
     // Reset booking fields
     document.getElementById("bookStart").value = "";

@@ -48,237 +48,278 @@ $json_vehicles = json_encode($db_vehicles);
 }
 
 body{
-    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+    font-family:"Poppins",sans-serif;
     background:#E6F0F4;
-    padding-top: 130px; 
+    padding-top:130px;
 }
 
+/* CONTAINER */
 .container{
     max-width:1200px;
     margin:auto;
-    padding:20px 20px;
+    padding:20px;
 }
+
+/* PAGE TITLE */
+.page-title{
+    text-align:center;
+    padding:30px 20px 10px;
+}
+
 .page-title h1{
-    color:#1e2a4a;
-    margin-bottom:10px;
+    color:#001F3F;
+    font-size:30px;
 }
+
 .page-title p{
-    color:#555;
-    font-size:16px;
+    color:#193857;
 }
-.page-title {
-    text-align: center;
-    padding: 30px 20px 10px;
-}
+
+/* ADD BOX (GLASS STYLE) */
 .add-box{
-    background:#fff;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(15px);
     padding:25px;
-    border-radius:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 10px 25px rgba(0,31,63,0.15);
     margin-bottom:40px;
 }
 
 .add-box h3{
-    margin-bottom:20px;
-    color:#1e2a4a;
+    margin-bottom:15px;
+    color:#001F3F;
 }
 
+/* INPUTS */
 .add-box input,
 .add-box select{
     padding:12px;
     margin:8px 5px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    width:180px;
+    border-radius:10px;
+    border:1px solid rgba(0,31,63,0.2);
+    background:rgba(255,255,255,0.6);
 }
 
+/* BUTTON */
 .add-box button{
     padding:12px 20px;
-    background:#1e2a4a;
-    color:white;
+    background:#FFD700;
+    color:#001F3F;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
     cursor:pointer;
     font-weight:600;
-}
-
-.section-title{
-    font-size:22px;
-    margin-bottom:20px;
-    color:#1e2a4a;
-    border-bottom:2px solid #ddd;
-    padding-bottom:8px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:white;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
     transition:0.3s;
 }
 
-.card:hover{
-    transform:translateY(-5px);
+.add-box button:hover{
+    background:#e6c200;
 }
 
+/* FILTER */
+.section-title{
+    font-size:22px;
+    margin-bottom:20px;
+    color:#001F3F;
+    border-bottom:2px solid rgba(0,31,63,0.2);
+    padding-bottom:8px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:30px;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 10px 25px rgba(0,31,63,0.15);
+    transition:all 0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 15px 35px rgba(0,31,63,0.25);
+}
+
+/* IMAGE */
 .card-img{
     position:relative;
-    height:200px;
+    height:220px;
+    overflow:hidden;
 }
 
 .card-img img{
     width:100%;
     height:100%;
     object-fit:cover;
+    transition:0.4s;
 }
 
+.card:hover img{
+    transform:scale(1.1);
+}
+
+/* BADGE */
 .badge{
     position:absolute;
-    top:10px;
-    right:10px;
-    padding:6px 12px;
+    top:12px;
+    right:12px;
+    padding:6px 14px;
     border-radius:20px;
-    font-size:13px;
+    font-size:12px;
     font-weight:600;
-    color:white;
+    color:#FFFFFF;
+    background:#001F3F;
 }
 
-.available{ background:#28a745; }
-.unavailable{ background:#dc3545; }
+.available{ background:#001F3F; }
+.unavailable{ background:#193857; }
 
-.card-body{ padding:18px; }
-.card-body h4{ margin-bottom:10px; color:#1e2a4a; }
-.price{ font-weight:700; font-size:18px; margin-bottom:5px; }
-.distance{ color:#666; font-size:14px; }
-
-input[type="file"] { display: none; }
-.upload-btn {
-    background-color: #1e2a78;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
+/* BODY */
+.card-body{
+    padding:18px;
 }
 
-.add-vehicle-link { text-decoration: none; }
-.add-vehicle-card {
-    border: 3px dashed #1e2a4a;
-    background: #f8fbff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 380px;
-    cursor: pointer;
+.card-body h4{
+    margin-bottom:8px;
+    color:#001F3F;
 }
 
-.card-image-container {
-    background: #e6f0f4;
-    width: 80px; height: 80px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
+/* TEXT */
+.price{
+    font-weight:700;
+    font-size:18px;
+    color:#001F3F;
 }
 
-.add-icon { font-size: 50px; color: #1e2a4a; font-weight: bold; }
-.car-name { font-weight: 700; color: #1e2a4a; font-size: 20px; }
-
-/* POPUP STYLING */
-.popup-overlay{
-    position:fixed;
-    top:0; left:0; width:100%; height:100%;
-    background:rgba(0,0,0,0.6);
-    display:none;
-    justify-content:center;
-    align-items:center;
-    z-index:999;
+.distance{
+    color:#193857;
+    font-size:14px;
 }
 
-.popup-card{
-    background:white;
-    width:850px;
-    max-width:95%;
-    border-radius:18px;
-    overflow:hidden;
-    box-shadow:0 20px 45px rgba(0,0,0,0.25);
+/* BUTTON GROUP */
+.card-body div button{
+    border-radius:10px !important;
+    transition:0.3s;
+}
+
+/* VIEW BUTTON */
+.card-body button:first-child{
+    background:#001F3F !important;
+    color:#FFFFFF !important;
+}
+
+.card-body button:first-child:hover{
+    background:#193857 !important;
+}
+
+/* DELETE BUTTON */
+.card-body button:last-child{
+    background:#FFD700 !important;
+    color:#001F3F !important;
+}
+
+.card-body button:last-child:hover{
+    background:#e6c200 !important;
+}
+
+/* ADD VEHICLE CARD */
+.add-vehicle-card{
+    border:2px dashed #001F3F;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(10px);
     display:flex;
-}
-
-.popup-left{
-    width:40%;
-    background:#f4f6f9;
-    display:flex;
+    flex-direction:column;
     align-items:center;
     justify-content:center;
-    padding:10px;
-}
-
-.popup-img{
-    max-width:100%;
-    max-height:100%;
-    object-fit:contain; /* Keeps image from being cut or stretched */
-    border-radius:10px;
-}
-
-.popup-right{
-    width:60%;
-    padding:25px;
-    position:relative;
-    max-height: 85vh;
-    overflow-y: auto;
-}
-
-.popup-close{
-    position:absolute;
-    top:15px; right:20px;
-    font-size:24px;
+    min-height:380px;
     cursor:pointer;
-    color:#333;
+    border-radius:20px;
+    transition:0.3s;
 }
 
-.popup-right h2 { margin-bottom: 10px; color: #1e2a4a; }
-
-.step-box { margin-bottom: 20px; }
-.step-box h4 {
-    color: #1e2a4a;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
-    margin-bottom: 10px;
-    font-size: 16px;
+.add-vehicle-card:hover{
+    background:rgba(255,255,255,0.3);
+    transform:scale(1.03);
 }
 
-.step-box p { font-size: 14px; margin-bottom: 5px; color: #555; }
-.step-box p b { color: #333; width: 140px; display: inline-block; }
-
-/* ACTION BUTTONS: DARK BLUE BACKGROUND, WHITE FONT */
-.action-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
+.card-image-container{
+    background:#001F3F;
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.lender-btn {
-    background: #001F3F; /* Dark Blue */
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-weight: 600;
-    cursor: pointer;
-    font-size: 13px;
-    transition: 0.2s;
+.add-icon{
+    font-size:40px;
+    color:#FFD700;
 }
 
-.lender-btn:hover { background: #003366; }
+.car-name{
+    margin-top:10px;
+    font-weight:600;
+    color:#001F3F;
+}
 
+/* POPUP */
+.popup-overlay{
+    background:rgba(0,31,63,0.7);
+}
+
+/* POPUP CARD */
+.popup-card{
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(20px);
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.3);
+}
+
+/* LEFT */
+.popup-left{
+    background:rgba(255,255,255,0.2);
+}
+
+/* TEXT */
+.popup-right h2{
+    color:#001F3F;
+}
+
+/* STEP BOX */
+.step-box h4{
+    color:#001F3F;
+    border-bottom:1px solid rgba(0,31,63,0.2);
+}
+
+.step-box p{
+    color:#193857;
+}
+
+/* ACTION BUTTONS */
+.lender-btn{
+    background:#FFD700;
+    color:#001F3F;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.lender-btn:hover{
+    background:#e6c200;
+}
 </style>
 </head>
 
@@ -359,7 +400,7 @@ function renderVehicles(){
             <div class="card">
                 <div class="card-img">
                     <img src="${imgSrc}" onerror="this.src='https://placehold.co/300x200?text=No+Image'">
-                    <div class="badge ${isAvailable ? 'available' : 'unavailable'}">
+                    <div class="badge" style="background:${isAvailable ? '#001F3F' : '#193857'}">
                         ${isAvailable ? 'Available' : 'Unavailable'}
                     </div>
                 </div>

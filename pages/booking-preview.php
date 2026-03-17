@@ -9,21 +9,199 @@
 body{
     margin:0;
     padding-top:130px;
-    font-family:"Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    font-family:"Poppins", sans-serif;
     background:#E6F0F4;
 }
 
+/* MAIN */
 .main-content{
     max-width:1100px;
     margin:auto;
     padding:20px;
 }
+
+/* CONTAINER */
+.booking-preview-container{
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(18px);
+    border-radius:20px;
+    padding:30px;
+    box-shadow:0 10px 30px rgba(0,31,63,0.15);
+    border:1px solid rgba(255,255,255,0.3);
+}
+
+/* TITLE */
+.booking-title{
+    text-align:center;
+    color:#001F3F;
+    margin-bottom:25px;
+}
+
+/* SECTION */
+.booking-section{
+    margin-bottom:30px;
+}
+
+.booking-section h3{
+    color:#193857;
+    margin-bottom:15px;
+}
+
+/* VEHICLE CARD */
+.vehicle-preview-card{
+    display:flex;
+    gap:20px;
+    background: rgba(255,255,255,0.4);
+    padding:15px;
+    border-radius:15px;
+    align-items:center;
+}
+
 .vehicle-preview-image img{
     width:180px;
     height:120px;
     object-fit:cover;
+    border-radius:10px;
+}
+
+/* DETAILS */
+.vehicle-preview-name{
+    font-size:18px;
+    font-weight:600;
+    color:#001F3F;
+}
+
+.vehicle-preview-price{
+    font-size:16px;
+    color:#FFD700;
+    font-weight:600;
+    margin:5px 0;
+}
+
+.vehicle-specs{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.spec-item{
+    font-size:13px;
+    background:#193857;
+    color:#FFFFFF;
+    padding:4px 10px;
     border-radius:8px;
-    background: #ccc; /* Adds a gray background if image takes a second to load */
+}
+
+/* PRICE SUMMARY */
+.price-summary{
+    background: rgba(255,255,255,0.4);
+    padding:20px;
+    border-radius:15px;
+}
+
+.price-row{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
+    color:#193857;
+}
+
+.total-row{
+    border-top:1px solid rgba(0,31,63,0.2);
+    padding-top:10px;
+    font-size:16px;
+}
+
+/* PAYMENT METHODS */
+.payment-methods{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px,1fr));
+    gap:15px;
+}
+
+.payment-method-card{
+    background: rgba(255,255,255,0.4);
+    padding:20px;
+    border-radius:15px;
+    text-align:center;
+    cursor:pointer;
+    transition:0.3s;
+    border:1px solid transparent;
+}
+
+.payment-method-card:hover{
+    transform:translateY(-5px);
+    border:1px solid #FFD700;
+}
+
+/* ACTIVE */
+.payment-method-card.active{
+    border:2px solid #FFD700;
+    box-shadow:0 0 10px rgba(255,215,0,0.4);
+}
+
+/* ICON */
+.payment-icon{
+    font-size:28px;
+    margin-bottom:10px;
+}
+
+.payment-name{
+    color:#001F3F;
+    font-weight:500;
+}
+
+/* ACTION BUTTONS */
+.booking-actions{
+    display:flex;
+    justify-content:space-between;
+    margin-top:20px;
+}
+
+/* PRIMARY BUTTON */
+.btn-primary{
+    background:#FFD700;
+    color:#001F3F;
+    border:none;
+    padding:12px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    font-weight:600;
+    transition:0.3s;
+}
+
+.btn-primary:hover{
+    background:#e6c200;
+    transform:scale(1.05);
+}
+
+/* DISABLED */
+.btn-primary:disabled{
+    opacity:0.5;
+    cursor:not-allowed;
+}
+
+/* SECONDARY */
+.btn-secondary{
+    background:#193857;
+    color:#FFFFFF;
+    border:none;
+    padding:12px 25px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn-secondary:hover{
+    background:#001F3F;
+}
+.payment-method-card:active{
+    transform:scale(0.97);
+}
+/* MESSAGE BOX */
+#messageBox{
+    background:#001F3F !important;
+    color:#FFFFFF;
 }
 </style>
 </head>

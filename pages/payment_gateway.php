@@ -71,18 +71,20 @@
 
         <p style="font-size: 12px; color: #777; margin: 20px 0;">* This is a secure demo environment for college project evaluation.</p>
         
-        <button type="button" class="pay-btn" onclick="startDemoPayment()">Pay Now</button>
+        
     </form>
 </div>
 
-<script>
+<script> 
 function toggleFields() {
     const method = document.getElementById('method').value;
     document.getElementById('cardSection').style.display = (method === 'Card') ? 'block' : 'none';
     document.getElementById('upiSection').style.display = (method === 'UPI') ? 'block' : 'none';
 }
-
+ 
 function startDemoPayment() {
+    document.getElementById("payBtn").innerText = "Processing...";
+    document.getElementById("payBtn").disabled = true;
     const overlay = document.getElementById('overlay');
     const statusText = document.getElementById('statusText');
     overlay.style.display = 'flex';

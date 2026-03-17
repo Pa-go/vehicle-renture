@@ -6,63 +6,117 @@
     <title>Vehicle Details | Renture</title>
     <link rel="stylesheet" href="../assets/css/style.css">
     <style>
-        .form-container {
-            max-width: 700px;
-            margin: 0 auto;
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #001F3F;
-        }
-        input[type="text"],
-        input[type="number"],
-        input[type="file"], /* Added styling for file input */
-        textarea,
-        select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 15px;
-        }
-        .radio-group {
-            display: flex;
-            gap: 20px;
-            margin-top: 8px;
-        }
-        .radio-group label {
-            display: inline-block;
-            font-weight: normal;
-            margin-left: 5px;
-        }
-        .submit-button {
-            background: linear-gradient(135deg, #001F3F, #193857);
-            color: white;
-            padding: 12px 30px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 10px;
-        }
-        .submit-button:hover {
-            background: linear-gradient(135deg, #193857, #001F3F);
-        }
-        a {
-           text-decoration: none;
-        }
+      body {
+    background: #E6F0F4;
+    font-family: "Poppins", sans-serif;
+}
+
+/* CONTAINER */
+.form-container {
+    max-width: 750px;
+    margin: 40px auto;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(18px);
+    padding: 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+    box-shadow: 0 10px 30px rgba(0,31,63,0.15);
+}
+
+/* TITLE */
+.form-container h2 {
+    text-align: center;
+    color: #001F3F;
+    margin-bottom: 20px;
+}
+
+/* GROUP */
+.form-group {
+    margin-bottom: 18px;
+}
+
+/* LABEL */
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+    color: #001F3F;
+}
+
+/* INPUTS */
+input[type="text"],
+input[type="number"],
+input[type="file"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(0,31,63,0.2);
+    background: rgba(255,255,255,0.6);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+/* FOCUS EFFECT */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: #FFD700;
+    box-shadow: 0 0 8px rgba(255,215,0,0.4);
+    background: rgba(255,255,255,0.9);
+}
+
+/* RADIO */
+.radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+}
+
+.radio-group label {
+    font-weight: normal;
+    color: #193857;
+}
+
+/* SUBMIT BUTTON */
+.submit-button {
+    background: #FFD700;
+    color: #001F3F;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    width: 100%;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background: #e6c200;
+    transform: scale(1.02);
+}
+
+/* FILE INPUT CUSTOM */
+input[type="file"] {
+    background: rgba(255,255,255,0.5);
+    padding: 10px;
+    cursor: pointer;
+}
+
+/* MESSAGE BOX */
+#messageBox {
+    background: #001F3F !important;
+    color: #FFFFFF;
+}
+
+/* LINKS */
+a {
+    text-decoration: none;
+} 
     </style>
 </head>
 <body>
