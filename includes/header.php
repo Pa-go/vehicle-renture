@@ -85,8 +85,8 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 <div id="mySidebar" class="sidebar">
     <div style="padding:20px; text-align:right;"><button onclick="closeSidebar()" style="background:none; border:none; color:#fff; font-size:30px; cursor:pointer;">&times;</button></div>
     <a href="home.php">Home</a>
-    <a href="lender.php">Lender</a>
-    <a href="tenant.php">Tenant</a>
+    <a href="lender.php">you want to give</a>
+    <a href="tenant.php">you want to take</a>
     <a href="contact-feedback.php">Feedback</a>
     <?php if ($isLoggedIn): ?>
         <a href="../pages/logout.php" class="yellow-link">Logout</a>

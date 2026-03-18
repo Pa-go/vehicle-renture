@@ -70,7 +70,9 @@
         </div>
 
         <p style="font-size: 12px; color: #777; margin: 20px 0;">* This is a secure demo environment for college project evaluation.</p>
-        
+        <button type="button" class="pay-btn" id="payBtn" onclick="startDemoPayment()">
+    Pay ₹ <?php echo number_format($v_price); ?>
+</button>
         
     </form>
 </div>

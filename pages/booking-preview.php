@@ -353,41 +353,24 @@ function selectPaymentMethod(method) {
     // Enable proceed button
     document.getElementById('proceedToPaymentBtn').disabled = false;
 }
-
 function proceedToPayment() {
     if (!selectedPaymentMethod) {
-        if (typeof showMessage === 'function') {
-            showMessage('Please select a payment method');
-        } else {
-            alert('Please select a payment method');
-        }
+        alert('Please select a payment method');
         return;
     }
 
-    // Open payment modal with total amount first
-    if (typeof openPaymentModal === 'function') {
-        openPaymentModal(window.bookingTotal || 0);
-        
-        // Set payment method in modal after a short delay to ensure modal is open
-        setTimeout(() => {
-            const paymentMethodSelect = document.getElementById('paymentMethod');
-            if (paymentMethodSelect) {
-                const methodMap = {
-                    'card': 'credit',
-                    'upi': 'upi',
-                    'cash': 'cash',
-                    'wallet': 'wallet'
-                };
-                paymentMethodSelect.value = methodMap[selectedPaymentMethod] || selectedPaymentMethod;
-                
-                // Trigger change event to show/hide conditional fields
-                const event = new Event('change');
-                paymentMethodSelect.dispatchEvent(event);
-            }
-        }, 100);
-    } else {
-        alert('Payment modal not loaded');
-    }
+    const urlParams = new URLSearchParams(window.location.search);
+    const vehicleId = urlParams.get('id') || 0;
+    const total = window.bookingTotal || 0;
+
+    const methodMap = {
+        'card': 'Card',
+        'upi': 'UPI',
+        'cash': 'Cash',
+        'wallet': 'Card'
+    };
+
+    window.location.href = '../pages/payment_gateway.php?id=' + vehicleId + '&price=' + total + '&method=' + methodMap[selectedPaymentMethod];
 }
 </script>
 </body>
