@@ -1,11 +1,10 @@
 <?php if (session_status() === PHP_SESSION_NONE) { session_start(); } ?>
 <?php
-include '../database/db_config.php';
-session_start();
-
-header('Content-Type: application/json');
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Only set header for JSON responses when actually processing a POST request
+    header('Content-Type: application/json');
+    include '../database/db_config.php';
+
     $v_id = $_POST['vehicle_id'] ?? 0;
     $amount = $_POST['amount'] ?? 0;
     $user_id = $_SESSION['user_id'] ?? 1; // Default to 1 for demo if no session

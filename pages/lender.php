@@ -1,7 +1,7 @@
 <?php
 // 1. Database Connection & Session
 include '../database/db_config.php';
-include '../includes/header.php'; 
+session_start();
 
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../pages/log_reg.php");
@@ -11,7 +11,6 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // 2. Fetch REAL data from Database
-// We use 'AS' to match the keys your existing JavaScript expects
 $sql = "SELECT 
             vehicle_name as name, 
             vehicle_type as type, 
@@ -23,11 +22,14 @@ $sql = "SELECT
         WHERE owner_id = ?";
 
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $user_id);
-$stmt->execute();
-$db_vehicles = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+if ($stmt) {
+    $stmt->bind_param("i", $user_id);
+    $stmt->execute();
+    $db_vehicles = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+} else {
+    $db_vehicles = [];
+}
 
-// Convert PHP data to JSON for the JavaScript array
 $json_vehicles = json_encode($db_vehicles);
 ?>
 
@@ -37,7 +39,7 @@ $json_vehicles = json_encode($db_vehicles);
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lender Dashboard | Renture</title>
-
+<link rel="stylesheet" href="../assets/css/style.css">
 <style>
 *{
     margin:0;
@@ -46,225 +48,288 @@ $json_vehicles = json_encode($db_vehicles);
 }
 
 body{
-    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+    font-family:"Poppins",sans-serif;
     background:#E6F0F4;
+    padding-top:130px;
 }
 
+/* CONTAINER */
 .container{
     max-width:1200px;
     margin:auto;
-    padding:40px 20px;
+    padding:20px;
 }
 
-.header{
+/* PAGE TITLE */
+.page-title{
     text-align:center;
-    margin-bottom:40px;
+    padding:30px 20px 10px;
 }
 
-.header h1{
-    font-size:36px;
-    color:#1e2a4a;
+.page-title h1{
+    color:#001F3F;
+    font-size:30px;
 }
 
-.header p{
-    margin-top:10px;
-    color:#555;
-    font-size:16px;
+.page-title p{
+    color:#193857;
 }
 
+/* ADD BOX (GLASS STYLE) */
 .add-box{
-    background:#fff;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(15px);
     padding:25px;
-    border-radius:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    border-radius:18px;
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 10px 25px rgba(0,31,63,0.15);
     margin-bottom:40px;
 }
 
 .add-box h3{
-    margin-bottom:20px;
-    color:#1e2a4a;
+    margin-bottom:15px;
+    color:#001F3F;
 }
 
+/* INPUTS */
 .add-box input,
 .add-box select{
     padding:12px;
     margin:8px 5px;
-    border:1px solid #ddd;
-    border-radius:8px;
-    width:180px;
+    border-radius:10px;
+    border:1px solid rgba(0,31,63,0.2);
+    background:rgba(255,255,255,0.6);
 }
 
-.add-box input[type="file"]{
-    width:auto;
-}
-
+/* BUTTON */
 .add-box button{
     padding:12px 20px;
-    background:#1e2a4a;
-    color:white;
+    background:#FFD700;
+    color:#001F3F;
     border:none;
-    border-radius:8px;
+    border-radius:10px;
     cursor:pointer;
     font-weight:600;
-}
-
-.add-box button:hover{
-    background:#ffd700;
-    color:#1e2a4a;
-}
-
-.section-title{
-    font-size:22px;
-    margin-bottom:20px;
-    color:#1e2a4a;
-    border-bottom:2px solid #ddd;
-    padding-bottom:8px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(300px,1fr));
-    gap:25px;
-}
-
-.card{
-    background:white;
-    border-radius:12px;
-    overflow:hidden;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
     transition:0.3s;
 }
 
-.card:hover{
-    transform:translateY(-5px);
+.add-box button:hover{
+    background:#e6c200;
 }
 
+/* FILTER */
+.section-title{
+    font-size:22px;
+    margin-bottom:20px;
+    color:#001F3F;
+    border-bottom:2px solid rgba(0,31,63,0.2);
+    padding-bottom:8px;
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+    gap:30px;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.15);
+    backdrop-filter:blur(15px);
+    border-radius:20px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,0.3);
+    box-shadow:0 10px 25px rgba(0,31,63,0.15);
+    transition:all 0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-8px) scale(1.02);
+    box-shadow:0 15px 35px rgba(0,31,63,0.25);
+}
+
+/* IMAGE */
 .card-img{
     position:relative;
-    height:200px;
+    height:220px;
+    overflow:hidden;
 }
 
 .card-img img{
     width:100%;
     height:100%;
     object-fit:cover;
+    transition:0.4s;
 }
 
+.card:hover img{
+    transform:scale(1.1);
+}
+
+/* BADGE */
 .badge{
     position:absolute;
-    top:10px;
-    right:10px;
-    padding:6px 12px;
+    top:12px;
+    right:12px;
+    padding:6px 14px;
     border-radius:20px;
-    font-size:13px;
+    font-size:12px;
     font-weight:600;
-    color:white;
+    color:#FFFFFF;
+    background:#001F3F;
 }
 
-.available{
-    background:#28a745;
-}
+.available{ background:#001F3F; }
+.unavailable{ background:#193857; }
 
-.unavailable{
-    background:#dc3545;
-}
-
+/* BODY */
 .card-body{
     padding:18px;
 }
 
 .card-body h4{
-    margin-bottom:10px;
-    color:#1e2a4a;
+    margin-bottom:8px;
+    color:#001F3F;
 }
 
+/* TEXT */
 .price{
     font-weight:700;
     font-size:18px;
-    margin-bottom:5px;
+    color:#001F3F;
 }
 
 .distance{
-    color:#666;
+    color:#193857;
     font-size:14px;
 }
 
-@media(max-width:768px){
-    .add-box input{
-        width:100%;
-        display:block;
-    }
-}
-input[type="file"] {
-    display: none;
+/* BUTTON GROUP */
+.card-body div button{
+    border-radius:10px !important;
+    transition:0.3s;
 }
 
-.upload-btn {
-    background-color: #1e2a78;
-    color: white;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
+/* VIEW BUTTON */
+.card-body button:first-child{
+    background:#001F3F !important;
+    color:#FFFFFF !important;
 }
 
-#image {
-    display: none;
+.card-body button:first-child:hover{
+    background:#193857 !important;
 }
 
-.add-vehicle-link {
-    text-decoration: none;
+/* DELETE BUTTON */
+.card-body button:last-child{
+    background:#FFD700 !important;
+    color:#001F3F !important;
 }
 
-.add-vehicle-card {
-    border: 3px dashed #1e2a4a;
-    background: #f8fbff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 380px;
-    cursor: pointer;
-    transition: 0.3s;
+.card-body button:last-child:hover{
+    background:#e6c200 !important;
 }
 
-.add-vehicle-card:hover {
-    background: #fff;
-    border-color: #ffd700;
+/* ADD VEHICLE CARD */
+.add-vehicle-card{
+    border:2px dashed #001F3F;
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(10px);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    min-height:380px;
+    cursor:pointer;
+    border-radius:20px;
+    transition:0.3s;
 }
 
-.card-image-container {
-    background: #e6f0f4;
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 15px;
+.add-vehicle-card:hover{
+    background:rgba(255,255,255,0.3);
+    transform:scale(1.03);
 }
 
-.add-icon {
-    font-size: 50px;
-    color: #1e2a4a;
-    font-weight: bold;
+.card-image-container{
+    background:#001F3F;
+    width:80px;
+    height:80px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 }
 
-.car-name {
-    font-weight: 700;
-    color: #1e2a4a;
-    font-size: 20px;
+.add-icon{
+    font-size:40px;
+    color:#FFD700;
+}
+
+.car-name{
+    margin-top:10px;
+    font-weight:600;
+    color:#001F3F;
+}
+
+/* POPUP */
+.popup-overlay{
+    background:rgba(0,31,63,0.7);
+}
+
+/* POPUP CARD */
+.popup-card{
+    background:rgba(255,255,255,0.2);
+    backdrop-filter:blur(20px);
+    border-radius:20px;
+    border:1px solid rgba(255,255,255,0.3);
+}
+
+/* LEFT */
+.popup-left{
+    background:rgba(255,255,255,0.2);
+}
+
+/* TEXT */
+.popup-right h2{
+    color:#001F3F;
+}
+
+/* STEP BOX */
+.step-box h4{
+    color:#001F3F;
+    border-bottom:1px solid rgba(0,31,63,0.2);
+}
+
+.step-box p{
+    color:#193857;
+}
+
+/* ACTION BUTTONS */
+.lender-btn{
+    background:#FFD700;
+    color:#001F3F;
+    border:none;
+    padding:10px 15px;
+    border-radius:10px;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.lender-btn:hover{
+    background:#e6c200;
 }
 </style>
 </head>
 
 <body>
-
+<?php include '../includes/header.php'; ?>
 <div class="container">
 
-    <div class="header">
+    <div class="page-title">
         <h1>Hello Lender 👋</h1>
-        <p>Here are the available vehicles listed on Renture.</p>
+        <p>Manage your vehicles and tenant rental requests.</p>
     </div>
 
     <div class="add-box">
@@ -295,44 +360,27 @@ input[type="file"] {
         </select>
     </div>
 
-    <div class="section-title">Available Vehicles</div>
+    <div class="section-title">Your Vehicles</div>
     <div class="grid" id="vehicleGrid"></div>
 
 </div>
 
+<?php include '../includes/footer.php'; ?>
+
 <script>
-// 1. Get real data from PHP
 const dbData = <?php echo $json_vehicles ?: '[]'; ?>;
 
-// 2. Mock Data (Sample Cars)
 const mockData = [
   {
-    name:"Honda Civic (Sample)",
-    type:"Car",
-    price:2000,
-    distance:1.2,
-    availability:true,
-    image:"https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&q=80&w=300"
-  },
-  {
-    name:"BMW X5 (Sample)",
-    type:"Car",
-    price:2500,
-    distance:5.1,
-    availability:true,
-    image:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnTcv-iF16V7kzSU4XzDx4eOew41akzT7H7A&s"
-  },
-  {
-    name:"Yamaha R15 (Sample)",
-    type:"Bike",
-    price:1000,
-    distance:2.5,
-    availability:true,
-    image:"https://images.unsplash.com/photo-1591637333184-19aa84b3e01f?auto=format&fit=crop&q=80&w=300"
+    name:"Toyota Camry Hybrid (Sample)",
+    type:"Car", price:4000, distance:2.5, availability:true,
+    image:"https://images.unsplash.com/photo-1621007947382-bb3c3994e3fb?auto=format&fit=crop&q=80&w=400",
+    brand:"Toyota", fuel:"Hybrid", plate:"MH 01 AB 1234", location:"Mumbai", status:"Available",
+    tenant_name:"Rahul Sharma", tenant_email:"rahul@example.com", tenant_phone:"+91 98765 43210", tenant_dl:"DL123456789",
+    start_date:"2026-03-20", end_date:"2026-03-22", duration:"2 Days", total_price:"₹ 8,000"
   }
 ];
 
-// 3. Combine both: DB data followed by Mock data
 const vehicles = [...dbData, ...mockData];
 
 function renderVehicles(){
@@ -340,25 +388,19 @@ function renderVehicles(){
     const grid = document.getElementById("vehicleGrid");
     grid.innerHTML = "";
 
-    const filteredVehicles = vehicles.filter(vehicle => {
-        if(selectedType === "All") return true;
-        return vehicle.type === selectedType;
-    });
+    const filteredVehicles = vehicles.filter(v => selectedType === "All" || v.type === selectedType);
 
     filteredVehicles.forEach((vehicle, index)=>{
-        // Determine if we need to look in the uploads folder (DB data) or use URL (Mock data)
         let imgSrc = (typeof vehicle.image === 'string' && vehicle.image.startsWith('uploads/')) 
-                     ? '../' + vehicle.image 
-                     : vehicle.image;
+                     ? '../' + vehicle.image : vehicle.image;
 
-        // Determine availability (handles Boolean from Mock or String/Int from DB)
         let isAvailable = (vehicle.availability === true || vehicle.availability === "Available" || vehicle.availability == 1 || vehicle.availability === "true");
 
         grid.innerHTML += `
             <div class="card">
                 <div class="card-img">
                     <img src="${imgSrc}" onerror="this.src='https://placehold.co/300x200?text=No+Image'">
-                    <div class="badge ${isAvailable ? 'available' : 'unavailable'}">
+                    <div class="badge" style="background:${isAvailable ? '#001F3F' : '#193857'}">
                         ${isAvailable ? 'Available' : 'Unavailable'}
                     </div>
                 </div>
@@ -366,56 +408,57 @@ function renderVehicles(){
                     <h4>${vehicle.name}</h4>
                     <div style="font-size:13px;color:#888;margin-bottom:6px;">${vehicle.type}</div>
                     <div class="price">₹ ${Number(vehicle.price).toLocaleString()}</div>
-                    <div class="distance">${vehicle.distance} ${typeof vehicle.distance === 'number' || !isNaN(vehicle.distance) ? 'km away' : ''}</div>
+                    <div class="distance">${vehicle.distance} ${typeof vehicle.distance === 'number' ? 'km away' : ''}</div>
                     <div style="margin-top:12px; display:flex; gap:10px;">
                         <button onclick="viewDetails(${index})" style="flex:1; padding:10px; background:#1e2a4a; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">View Details</button>
                         <button onclick="deleteVehicle(${index})" style="flex:1; padding:10px; background:#dc3545; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:600;">Delete</button>
                     </div>
                 </div>
-            </div>
-        `;
+            </div>`;
     });
 
-    // 4. ALWAYS ADD THE "ADD NEW VEHICLE" CARD AT THE VERY END
     grid.innerHTML += `
-        <a href="/Renture1/pages/form2.php" class="add-vehicle-link">
+        <a href="../pages/form2.php" class="add-vehicle-link">
             <div class="card add-vehicle-card">
-                <div class="card-image-container">
-                    <span class="add-icon">+</span>
-                </div>
-                <div class="card-details">
-                    <p class="car-name">Add New Vehicle</p>
-                </div>
+                <div class="card-image-container"><span class="add-icon">+</span></div>
+                <p class="car-name">Add New Vehicle</p>
             </div>
-        </a>
-    `;
-}
-
-function addVehicle(){
-    const name=document.getElementById("name").value.trim();
-    const type=document.getElementById("type").value;
-    const price=parseFloat(document.getElementById("price").value);
-    const distance=document.getElementById("distance").value;
-    const availability=document.getElementById("availability").value==="true";
-    const imageFile=document.getElementById("image").files[0];
-
-    if(!name || !type || !price || !distance || !imageFile){
-        alert("Please fill all fields!");
-        return;
-    }
-
-    const reader=new FileReader();
-    reader.onload=function(e){
-        vehicles.unshift({ name, type, price, distance, availability, image:e.target.result });
-        renderVehicles();
-    };
-    reader.readAsDataURL(imageFile);
+        </a>`;
 }
 
 function viewDetails(index){
     const vehicle = vehicles[index];
-    alert("Vehicle: " + vehicle.name + "\nPrice: ₹" + vehicle.price);
+    let imgSrc = (typeof vehicle.image === 'string' && vehicle.image.startsWith('uploads/')) ? '../' + vehicle.image : vehicle.image;
+
+    document.getElementById("popupImage").src = imgSrc;
+    document.getElementById("popupName").innerText = vehicle.name;
+
+    // Step 1: Vehicle Info
+    document.getElementById("p_type").innerText = vehicle.type || "N/A";
+    document.getElementById("p_brand").innerText = vehicle.brand || "N/A";
+    document.getElementById("p_fuel").innerText = vehicle.fuel || "N/A";
+    document.getElementById("p_price").innerText = "₹ " + vehicle.price + " / day";
+    document.getElementById("p_number").innerText = vehicle.plate || vehicle.distance || "N/A";
+    document.getElementById("p_location").innerText = vehicle.location || "N/A";
+    document.getElementById("p_status").innerText = vehicle.availability ? "Available" : "Unavailable";
+
+    // Step 2: Tenant Info
+    document.getElementById("p_tenant_name").innerText = vehicle.tenant_name || "N/A";
+    document.getElementById("p_tenant_email").innerText = vehicle.tenant_email || "N/A";
+    document.getElementById("p_tenant_phone").innerText = vehicle.tenant_phone || "N/A";
+    document.getElementById("p_tenant_dl").innerText = vehicle.tenant_dl || "N/A";
+
+    // Step 3: Booking Info
+    document.getElementById("p_start").innerText = vehicle.start_date || "N/A";
+    document.getElementById("p_end").innerText = vehicle.end_date || "N/A";
+    document.getElementById("p_duration").innerText = vehicle.duration || "N/A";
+    document.getElementById("p_total").innerText = vehicle.total_price || "N/A";
+
+    document.getElementById("vehiclePopup").style.display = "flex";
 }
+
+function closePopup(){ document.getElementById("vehiclePopup").style.display="none"; }
+function outsideClick(event){ if(event.target.id === "vehiclePopup") closePopup(); }
 
 function deleteVehicle(index){
     if(confirm("Delete this vehicle?")){
@@ -424,8 +467,66 @@ function deleteVehicle(index){
     }
 }
 
+function addVehicle() { alert("Please use the 'Add New Vehicle' card to open the form."); }
+
 document.addEventListener("DOMContentLoaded",renderVehicles);
 </script>
 
+<div id="vehiclePopup" class="popup-overlay" onclick="outsideClick(event)">
+  <div class="popup-card">
+
+    <div class="popup-left">
+        <img id="popupImage" class="popup-img">
+    </div>
+
+    <div class="popup-right">
+      <span class="popup-close" onclick="closePopup()">×</span>
+      <h2 id="popupName"></h2>
+
+      <div class="step-box">
+          <h4>Vehicle Information</h4>
+          <p><b>Vehicle Type:</b> <span id="p_type"></span></p>
+          <p><b>Brand / Model:</b> <span id="p_brand"></span></p>
+          <p><b>Fuel Type:</b> <span id="p_fuel"></span></p>
+          <p><b>Price:</b> <span id="p_price"></span></p>
+          <p><b>Vehicle Number:</b> <span id="p_number"></span></p>
+          <p><b>Location:</b> <span id="p_location"></span></p>
+          <p><b>Availability:</b> <span id="p_status"></span></p>
+      </div>
+
+      <div class="step-box">
+          <h4>Tenant Information</h4>
+          <p><b>Tenant Name:</b> <span id="p_tenant_name"></span></p>
+          <p><b>Tenant Email:</b> <span id="p_tenant_email"></span></p>
+          <p><b>Phone Number:</b> <span id="p_tenant_phone"></span></p>
+          <p><b>Driving License:</b> <span id="p_tenant_dl"></span></p>
+      </div>
+
+      <div class="step-box">
+          <h4>Booking Details</h4>
+          <p><b>Start Date:</b> <span id="p_start"></span></p>
+          <p><b>End Date:</b> <span id="p_end"></span></p>
+          <p><b>Duration:</b> <span id="p_duration"></span></p>
+          <p><b>Total Price:</b> <span id="p_total"></span></p>
+      </div>
+
+      <div class="step-box">
+          <h4>Booking Status</h4>
+          <p><b>Status:</b> <span style="color: #1e2a4a; font-weight: bold;">Pending</span></p>
+      </div>
+
+      <div class="step-box">
+          
+          <div class="action-buttons">
+              <button class="lender-btn" onclick="alert('Booking Accepted')">Accept Booking</button>
+              <button class="lender-btn" onclick="alert('Booking Rejected')">Reject Booking</button>
+              <button class="lender-btn" onclick="alert('Opening Contact...')">Contact Tenant</button>
+              <button class="lender-btn" onclick="alert('Marked as Completed')">Mark as Completed</button>
+          </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 </body>
 </html>
