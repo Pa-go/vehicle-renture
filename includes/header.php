@@ -176,8 +176,8 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
     <div style="padding:20px; text-align:right;"><button onclick="closeSidebar()" style="background:none; border:none; color:#fff; font-size:30px; cursor:pointer;">&times;</button></div>
 >>>>>>> 30d53e410b624a5d8282c21b8c70e4f19463ffc8
     <a href="home.php">Home</a>
-    <a href="lender.php">Lender</a>
-    <a href="tenant.php">Tenant</a>
+    <a href="lender.php">you want to give</a>
+    <a href="tenant.php">you want to take</a>
     <a href="contact-feedback.php">Feedback</a>
     <?php if ($isLoggedIn): ?>
         <a href="../pages/logout.php" class="yellow-link">Logout</a>
