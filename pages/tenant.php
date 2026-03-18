@@ -41,7 +41,7 @@ $json_vehicles = json_encode($db_vehicles);
 <link rel="stylesheet" href="../assets/css/style.css">
 <style>
 body {
-    padding-top: 130px;
+    padding-top: 5px;
     background: #E6F0F4;
     font-family: 'Poppins', sans-serif;
 }
