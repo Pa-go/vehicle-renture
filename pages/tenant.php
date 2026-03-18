@@ -228,6 +228,5 @@ function renderTenantVehicles() {
 
 document.addEventListener("DOMContentLoaded", renderTenantVehicles);
 </script>
-
 </body>
 </html>
