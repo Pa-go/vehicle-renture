@@ -105,17 +105,17 @@ input[type="file"] { background: rgba(255,255,255,0.5); padding: 10px; cursor: p
         </div>
 
         <div class="form-group">
-            <label for="price">8. Base Price ($):</label>
+            <label for="price">8. Base Price:</label>
             <input type="number" id="price" name="price" min="0" step="0.01" required>
         </div>
 
         <div class="form-group">
-            <label for="discount">9. Discount Amount ($):</label>
+            <label for="discount">9. Discount Amount:</label>
             <input type="number" id="discount" name="discount" min="0" step="0.01" value="0">
         </div>
 
         <div class="form-group">
-            <label for="final-price">10. Final Price ($) - Auto-Calculated:</label>
+            <label for="final-price">10. Final Price - Auto-Calculated:</label>
             <input type="number" id="final-price" name="final_price" readonly style="background:rgba(0,0,0,0.05);">
         </div>
         
