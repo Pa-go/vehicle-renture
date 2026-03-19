@@ -22,9 +22,9 @@ if (isset($_GET['ajax_fetch'])) {
 }
 
 $sql = "SELECT id, vehicle_name as name, vehicle_type as type, price, final_price, discount, 
-               plate_number as plate, status as availability, vehicle_image as image,
-               brand, model, fuel_type as fuel, color, v_condition as `condition`,
-               description, features FROM vehicles";
+                plate_number as plate, status as availability, vehicle_image as image,
+                brand, model, fuel_type as fuel, color, v_condition as `condition`,
+                description, features FROM vehicles";
 
 $result = $conn->query($sql);
 $db_vehicles = [];
@@ -72,6 +72,14 @@ $json_vehicles = json_encode($db_vehicles);
         .step-box p b { color: #333; width: 140px; display: inline-block; }
         .booking-btn { background: #FFD700; color: #001F3F; border: none; padding: 12px; border-radius: 10px; font-weight: 600; cursor: pointer; width: 100%; transition: 0.3s; }
         .booking-btn:hover { background: #e6c200; }
+
+        .btn-book:disabled {
+            background: #cccccc !important;
+            color: #666666;
+            cursor: not-allowed;
+            opacity: 0.6;
+            transform: none !important;
+        }
     </style>
 </head>
 <body>
@@ -237,23 +245,95 @@ function viewDetails(id) {
     document.getElementById("calcTotal").innerText = "0";
 
     document.getElementById("vehiclePopup").style.display = "flex";
-}
 
-function calculateTotal() {
-    const start = document.getElementById("bookStart").value;
-    const end = document.getElementById("bookEnd").value;
-    if (start && end && currentVehicle) {
-        const daysDiff = Math.ceil((new Date(end) - new Date(start)) / (1000 * 3600 * 24));
-        if (daysDiff > 0) {
-            const price = currentVehicle.final_price || currentVehicle.price;
-            document.getElementById("calcDuration").innerText = daysDiff;
-            document.getElementById("calcTotal").innerText = Number(daysDiff * price).toLocaleString();
-        }
+    const isAvailable = (vehicle.availability === "Available" || vehicle.availability == 1);
+    const popupBtn = document.getElementById("popupBookBtn");
+
+    if (!isAvailable) {
+        popupBtn.disabled = true;
+        popupBtn.innerText = "Currently Unavailable";
+        popupBtn.style.background = "#ccc";
+        popupBtn.style.cursor = "not-allowed";
+    } else {
+        popupBtn.disabled = false;
+        popupBtn.innerText = "Book Now";
+        popupBtn.style.background = "#FFD700";
+        popupBtn.style.cursor = "pointer";
     }
 }
 
-function bookNowDirect(id) { window.location.href = `booking-preview.php?id=${id}`; }
-function bookNow() { if (currentVehicle) bookNowDirect(currentVehicle.id); }
+function calculateTotal() {
+    const startVal = document.getElementById("bookStart").value;
+    const endVal = document.getElementById("bookEnd").value;
+    const bookBtn = document.getElementById("popupBookBtn");
+    
+    if (startVal && endVal && currentVehicle) {
+        const start = new Date(startVal);
+        const end = new Date(endVal);
+        const price = parseFloat(currentVehicle.final_price || currentVehicle.price);
+
+        const diffInMs = end - start;
+        let daysDiff = Math.ceil(diffInMs / (1000 * 3600 * 24));
+
+        if (daysDiff < 0) {
+            alert("End date cannot be before start date!");
+            document.getElementById("bookEnd").value = "";
+            daysDiff = 0;
+        } else if (daysDiff === 0 && startVal === endVal) {
+            daysDiff = 1;
+        }
+
+        if (price <= 0) {
+            bookBtn.disabled = true;
+            bookBtn.innerText = "Invalid Price";
+            bookBtn.style.background = "#ccc";
+            daysDiff = 0;
+        } else if (daysDiff > 0) {
+            bookBtn.disabled = false;
+            bookBtn.innerText = "Book Now";
+            bookBtn.style.background = "#FFD700";
+        }
+
+        document.getElementById("calcDuration").innerText = daysDiff;
+        document.getElementById("calcTotal").innerText = (daysDiff * price).toLocaleString();
+    }
+}
+
+// FIXED: Now passes all data to booking-preview.php
+function bookNowDirect(id) { 
+    const duration = parseInt(document.getElementById("calcDuration").innerText);
+    const start = document.getElementById("bookStart").value;
+    const end = document.getElementById("bookEnd").value;
+    const vehicle = allVehicles.find(v => v.id == id);
+    
+    if (!vehicle) return;
+
+    if (duration <= 0 || !start || !end) {
+        alert("Please select valid dates in the details popup first!");
+        return;
+    }
+
+    const totalPrice = parseFloat(vehicle.final_price || vehicle.price) * duration;
+
+    const params = new URLSearchParams({
+        id: vehicle.id,
+        name: vehicle.name,
+        price: totalPrice,
+        brand: vehicle.brand || 'N/A',
+        model: vehicle.model || 'N/A',
+        type: vehicle.type || 'Vehicle',
+        image: vehicle.image || '',
+        start: start,
+        end: end
+    });
+
+    window.location.href = `booking-preview.php?${params.toString()}`; 
+}
+
+function bookNow() { 
+    if (currentVehicle) bookNowDirect(currentVehicle.id); 
+}
+
 function closePopup() { document.getElementById("vehiclePopup").style.display = "none"; }
 function outsideClick(e) { if (e.target.id === "vehiclePopup") closePopup(); }
 

@@ -62,12 +62,14 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
         </div>
     </div>
     <div class="right-nav">
-        <?php if ($isLoggedIn): ?>
-            <span class="login-btn" style="cursor: default;">HI, <?php echo strtoupper(htmlspecialchars(explode(' ', $userName)[0])); ?></span>
-        <?php else: ?>
-            <a class="login-btn" href="../pages/log_reg.php">LOGIN</a>
-        <?php endif; ?>
-    </div>
+    <?php if ($isLoggedIn): ?>
+        <a class="login-btn" href="lender-dashboard.php" style="cursor: pointer; display: inline-block;">
+            HI, <?php echo strtoupper(htmlspecialchars(explode(' ', $userName)[0])); ?>
+        </a>
+    <?php else: ?>
+        <a class="login-btn" href="../pages/log_reg.php">LOGIN</a>
+    <?php endif; ?>
+</div>
 </div>
 
 <div class="menu-bar">
