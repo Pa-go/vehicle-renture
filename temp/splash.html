@@ -5,67 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Renture | Loading...</title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #001F3F;
-      background-size: 400% 400%;
-      animation: gradientMove 10s ease infinite;
+      /* Deep Renture Blue */
+      background: #001F3F; 
       overflow: hidden;
     }
 
-    /* Smooth background animation */
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* Larger logo with glowing + floating animation */
     .logo {
-      width: 350px; /* Increased size from 200px */
+      width: 350px; 
       max-width: 80%;
+      /* floating and glowing animations */
       animation: floatLogo 3.5s ease-in-out infinite, glowEffect 2.5s ease-in-out infinite;
       filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
-      transition: transform 0.3s ease-in-out;
     }
 
-    /* Floating motion */
     @keyframes floatLogo {
       0% { transform: translateY(0) scale(1); }
-      50% { transform: translateY(-15px) scale(1.08); }
+      50% { transform: translateY(-15px) scale(1.05); }
       100% { transform: translateY(0) scale(1); }
     }
 
-    /* Soft glowing pulse effect */
     @keyframes glowEffect {
       0%, 100% {
-        filter: drop-shadow(0 0 15px rgba(123, 51, 126, 0.6))
-                drop-shadow(0 0 30px rgba(102, 103, 171, 0.5));
+        filter: drop-shadow(0 0 15px rgba(250, 204, 21, 0.4)); /* Renture Yellow tint */
       }
       50% {
-        filter: drop-shadow(0 0 35px rgba(245, 213, 224, 0.8))
-                drop-shadow(0 0 50px rgba(102, 103, 171, 0.8));
+        filter: drop-shadow(0 0 35px rgba(250, 204, 21, 0.7));
       }
     }
   </style>
 </head>
 <body>
-  <!---<a href="index.html">Home</a>--->
-  <img src="../images/logo.png" alt="Renture Logo" class="logo" />
+  <img src="../assets/images/logo.png" alt="Renture Logo" class="logo" onerror="this.src='https://placehold.co/350x150?text=RENTURE'"/>
 
   <script>
-    // Redirect to main page after 3.5 seconds
+    // Redirect to home page after the animation cycle
     setTimeout(() => {
-      window.location.href = "index.php";
+      // FIXED: Pointing to home.php which is our main page
+      window.location.href = "home.php"; 
     }, 3500);
   </script>
 </body>

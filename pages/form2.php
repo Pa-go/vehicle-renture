@@ -11,7 +11,6 @@
     font-family: "Poppins", sans-serif;
 }
 
-/* CONTAINER */
 .form-container {
     max-width: 750px;
     margin: 40px auto;
@@ -23,105 +22,32 @@
     box-shadow: 0 10px 30px rgba(0,31,63,0.15);
 }
 
-/* TITLE */
-.form-container h2 {
-    text-align: center;
-    color: #001F3F;
-    margin-bottom: 20px;
+.form-container h2 { text-align: center; color: #001F3F; margin-bottom: 20px; }
+.form-group { margin-bottom: 18px; }
+label { display: block; margin-bottom: 6px; font-weight: 600; color: #001F3F; }
+
+input[type="text"], input[type="number"], input[type="file"], textarea, select {
+    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(0,31,63,0.2);
+    background: rgba(255,255,255,0.6); font-size: 14px; outline: none; transition: all 0.3s ease;
 }
 
-/* GROUP */
-.form-group {
-    margin-bottom: 18px;
+input:focus, textarea:focus, select:focus {
+    border-color: #FFD700; box-shadow: 0 0 8px rgba(255,215,0,0.4); background: rgba(255,255,255,0.9);
 }
 
-/* LABEL */
-label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #001F3F;
-}
+.radio-group { display: flex; gap: 20px; margin-top: 8px; }
+.radio-group label { font-weight: normal; color: #193857; }
 
-/* INPUTS */
-input[type="text"],
-input[type="number"],
-input[type="file"],
-textarea,
-select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(0,31,63,0.2);
-    background: rgba(255,255,255,0.6);
-    font-size: 14px;
-    outline: none;
-    transition: all 0.3s ease;
-}
-
-/* FOCUS EFFECT */
-input:focus,
-textarea:focus,
-select:focus {
-    border-color: #FFD700;
-    box-shadow: 0 0 8px rgba(255,215,0,0.4);
-    background: rgba(255,255,255,0.9);
-}
-
-/* RADIO */
-.radio-group {
-    display: flex;
-    gap: 20px;
-    margin-top: 8px;
-}
-
-.radio-group label {
-    font-weight: normal;
-    color: #193857;
-}
-
-/* SUBMIT BUTTON */
 .submit-button {
-    background: #FFD700;
-    color: #001F3F;
-    padding: 14px;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-    width: 100%;
-    margin-top: 10px;
-    transition: all 0.3s ease;
+    background: #FFD700; color: #001F3F; padding: 14px; border: none; border-radius: 12px;
+    cursor: pointer; font-size: 16px; font-weight: 600; width: 100%; margin-top: 10px; transition: 0.3s ease;
 }
 
-.submit-button:hover {
-    background: #e6c200;
-    transform: scale(1.02);
-}
-
-/* FILE INPUT CUSTOM */
-input[type="file"] {
-    background: rgba(255,255,255,0.5);
-    padding: 10px;
-    cursor: pointer;
-}
-
-/* MESSAGE BOX */
-#messageBox {
-    background: #001F3F !important;
-    color: #FFFFFF;
-}
-
-/* LINKS */
-a {
-    text-decoration: none;
-} 
+.submit-button:hover { background: #e6c200; transform: scale(1.02); }
+input[type="file"] { background: rgba(255,255,255,0.5); padding: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-<div id="messageBox" style="display:none;position:fixed;top:10px;right:10px;background:#001F3F;color:#fff;padding:8px 12px;border-radius:6px;z-index:10000;font-family:Arial, sans-serif;"></div>
 
 <?php include '../includes/header.php'; ?>
 
@@ -133,17 +59,17 @@ a {
 
         <div class="form-group">
             <label for="vehicle-name">1. Name of Vehicle:</label>
-            <input type="text" id="vehicle-name" name="vehicle_name" required>
+            <input type="text" id="vehicle-name" name="vehicle_name" placeholder="e.g. Civic" required>
         </div>
 
         <div class="form-group">
             <label for="brand">2. Brand:</label>
-            <input type="text" id="brand" name="brand" required>
+            <input type="text" id="brand" name="brand" placeholder="e.g. Honda" required>
         </div>
 
         <div class="form-group">
-            <label for="model">3. Model:</label>
-            <input type="text" id="model" name="model" required>
+            <label for="model">3. Model Year:</label>
+            <input type="text" id="model" name="model" placeholder="e.g. 2024" required>
         </div>
 
         <div class="form-group">
@@ -159,7 +85,7 @@ a {
 
         <div class="form-group">
             <label for="plate-number">5. Plate Number:</label>
-            <input type="text" id="plate-number" name="plate_number" required>
+            <input type="text" id="plate-number" name="plate_number" placeholder="ABC-1234" pattern="[A-Za-z0-9\- ]+" title="Alphanumeric characters only" required>
         </div>
 
         <div class="form-group">
@@ -179,23 +105,23 @@ a {
         </div>
 
         <div class="form-group">
-            <label for="price">8. Price ($):</label>
+            <label for="price">8. Base Price ($):</label>
             <input type="number" id="price" name="price" min="0" step="0.01" required>
         </div>
 
         <div class="form-group">
-            <label for="discount">9. Discount ($):</label>
+            <label for="discount">9. Discount Amount ($):</label>
             <input type="number" id="discount" name="discount" min="0" step="0.01" value="0">
         </div>
 
         <div class="form-group">
-            <label for="final-price">10. Final Price ($) - Calculated:</label>
-            <input type="number" id="final-price" name="final_price" readonly disabled placeholder="Calculated Final Price">
+            <label for="final-price">10. Final Price ($) - Auto-Calculated:</label>
+            <input type="number" id="final-price" name="final_price" readonly style="background:rgba(0,0,0,0.05);">
         </div>
         
         <div class="form-group">
             <label for="description">11. Vehicle Description:</label>
-            <textarea id="description" name="description" rows="4"></textarea>
+            <textarea id="description" name="description" rows="4" maxlength="1000" placeholder="Tell us more about the history of the vehicle..."></textarea>
         </div>
 
         <div class="form-group">
@@ -209,9 +135,10 @@ a {
         </div>
 
         <div class="form-group">
-            <label for="features">13. Features (e.g., Airbags, Bluetooth, GPS, ABS):</label>
-            <textarea id="features" name="features" rows="2" placeholder="List key features separated by commas (e.g., Airbags, Bluetooth, ABS)"></textarea>
+            <label for="features">13. Key Features:</label>
+            <textarea id="features" name="features" rows="2" maxlength="500" placeholder="Airbags, Bluetooth, GPS, ABS..."></textarea>
         </div>
+
         <div class="form-group">
             <label for="status">14. Status:</label>
             <select id="status" name="status" required>
@@ -233,7 +160,25 @@ a {
 
 </div>
 
+<?php include '../includes/header.php'; ?>
+
+<script>
+// AUTO-CALCULATION LOGIC
+const priceInput = document.getElementById('price');
+const discountInput = document.getElementById('discount');
+const finalPriceInput = document.getElementById('final-price');
+
+function calculateFinalPrice() {
+    const price = parseFloat(priceInput.value) || 0;
+    const discount = parseFloat(discountInput.value) || 0;
+    const finalPrice = price - discount;
+    finalPriceInput.value = finalPrice > 0 ? finalPrice.toFixed(2) : 0;
+}
+
+priceInput.addEventListener('input', calculateFinalPrice);
+discountInput.addEventListener('input', calculateFinalPrice);
+</script>
+
 <?php include '../includes/footer.php'; ?>
-<script src="../assets/js/script.js"></script>
 </body>
 </html>

@@ -2,14 +2,32 @@
 include '../database/db_config.php';
 session_start();
 
+$user_id = $_SESSION['user_id'];
+
+// Check if the JavaScript is trying to update a status
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_id']) && isset($_POST['new_status'])) {
+    $v_id = $_POST['update_id'];
+    $n_status = $_POST['new_status'];
+
+    $update_sql = "UPDATE vehicles SET status = ? WHERE id = ? AND owner_id = ?";
+    $upd_stmt = $conn->prepare($update_sql);
+    $upd_stmt->bind_param("sii", $n_status, $v_id, $user_id);
+    
+    if ($upd_stmt->execute()) {
+        echo "SUCCESS";
+    } else {
+        echo "ERROR";
+    }
+    exit(); // Stop the rest of the page from loading during this "talk"
+}
+
 if (!isset($_SESSION['user_id'])) {
     header("Location: ../pages/log_reg.php");
     exit();
 }
 
-$user_id = $_SESSION['user_id'];
-
 $sql = "SELECT 
+            id,
             vehicle_name as name,
             brand,
             model,
@@ -485,22 +503,35 @@ function updateBooking(action){
     if(currentIndex === null) return;
 
     const vehicle = vehicles[currentIndex];
-    const statusEl = document.getElementById("p_status");
-
-    if(action === 'accept'){
-        vehicle.availability = "Available";
-        statusEl.innerText = "Available";
-        statusEl.style.color = "#28a745";
-        alert("Booking Accepted — Vehicle marked as Available.");
-    } else if(action === 'reject'){
-        vehicle.availability = "Unavailable";
-        statusEl.innerText = "Unavailable";
-        statusEl.style.color = "#dc3545";
-        alert("Booking Rejected — Vehicle marked as Unavailable.");
+    
+    // Safety check for real DB ID
+    if(!vehicle.id) {
+        alert("Cannot update sample data. Please test with a real vehicle.");
+        return;
     }
 
-    statusEl.style.fontWeight = "bold";
-    renderVehicles();
+    const newStatus = (action === 'accept') ? "Available" : "Unavailable";
+
+    const formData = new FormData();
+    formData.append('update_id', vehicle.id);
+    formData.append('new_status', newStatus);
+
+    // Send to the SAME page (lender.php)
+    fetch('lender.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.text())
+    .then(data => {
+        if(data.trim() === "SUCCESS") {
+            vehicle.availability = newStatus;
+            renderVehicles();
+            closePopup();
+            alert("Vehicle status updated in Database!");
+        } else {
+            alert("Error: " + data);
+        }
+    });
 }
 
 function closePopup(){ document.getElementById("vehiclePopup").style.display = "none"; }

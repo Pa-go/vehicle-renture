@@ -1,1 +1,0 @@
-<?php echo "<h1>The Server is Working!</h1>"; ?>

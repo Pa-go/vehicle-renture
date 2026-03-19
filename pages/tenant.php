@@ -2,6 +2,28 @@
 include '../database/db_config.php';
 session_start();
 
+// If the JavaScript asks for a background update, only send the JSON data
+if (isset($_GET['ajax_fetch'])) {
+    $search = isset($_GET['search']) ? $_GET['search'] : '';
+    
+    // Base SQL
+    $sync_sql = "SELECT id, vehicle_name as name, status as availability FROM vehicles";
+    
+    // Add Search Filter if user typed something
+    if (!empty($search)) {
+        $sync_sql .= " WHERE vehicle_name LIKE '%$search%' OR brand LIKE '%$search%'";
+    }
+
+    $sync_result = $conn->query($sync_sql);
+    $sync_data = [];
+    while($row = $sync_result->fetch_assoc()) {
+        $sync_data[] = $row;
+    }
+    echo json_encode($sync_data);
+    exit();
+}
+
+
 $sql = "SELECT 
             id,
             vehicle_name as name, 
@@ -210,13 +232,7 @@ body {
     cursor: pointer;
 }
 
-.no-vehicles {
-    text-align: center;
-    padding: 60px;
-    color: #193857;
-}
-
-/* POPUP - LENDER STYLE */
+/* POPUP STYLE */
 .popup-overlay {
     position: fixed;
     top: 0; left: 0;
@@ -352,7 +368,6 @@ body {
 
 <?php include __DIR__ . "/../includes/footer.php"; ?>
 
-<!-- POPUP - LENDER STYLE -->
 <div id="vehiclePopup" class="popup-overlay" onclick="outsideClick(event)">
   <div class="popup-card">
 
@@ -414,9 +429,36 @@ body {
 <script>
 const dbData = <?php echo $json_vehicles ?: '[]'; ?>;
 
+function syncWithDatabase(searchQuery = '') {
+    fetch(`tenant.php?ajax_fetch=1&search=${encodeURIComponent(searchQuery)}`)
+        .then(response => response.json())
+        .then(latestData => {
+            let changed = false;
+
+            latestData.forEach(serverVehicle => {
+                const localVehicle = dbData.find(v => v.id == serverVehicle.id);
+                if (localVehicle) {
+                    if (localVehicle.availability !== serverVehicle.availability) {
+                        localVehicle.availability = serverVehicle.availability;
+                        changed = true;
+                    }
+                }
+            });
+
+            if (changed) {
+                allVehicles.length = 0;
+                allVehicles.push(...dbData, ...mockData);
+                renderTenantVehicles();
+            }
+        })
+        .catch(err => console.log("Sync error:", err));
+}
+
+setInterval(syncWithDatabase, 5000);
+
 const mockData = [
     {
-        id: null,
+        id: 1001, // Added an ID for mock data too
         name: "Toyota Camry Hybrid",
         type: "Car",
         price: 40000,
@@ -428,32 +470,6 @@ const mockData = [
         brand: "Toyota", model: "Camry", fuel: "Hybrid", color: "White",
         condition: "Used", description: "Well maintained hybrid car.", features: "AC, Music System, GPS"
     },
-    {
-        id: null,
-        name: "Suzuki Swift",
-        type: "Car",
-        price: 25000,
-        final_price: 25000,
-        discount: 0,
-        plate: "MH-02-CD-5678",
-        availability: "Available",
-        image: "https://www.globalsuzuki.com/globalnews/2025/img/0528.jpg",
-        brand: "Suzuki", model: "Swift", fuel: "Petrol", color: "Red",
-        condition: "Good", description: "Compact and fuel efficient.", features: "AC, Bluetooth"
-    },
-    {
-        id: null,
-        name: "Kia K5",
-        type: "Car",
-        price: 55000,
-        final_price: 55000,
-        discount: 0,
-        plate: "MH-03-EF-9012",
-        availability: "Sold",
-        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT4L-2-OmGbn7Qcz9i-R1mTP1HbwQhUETUUyQ&s",
-        brand: "Kia", model: "K5", fuel: "Petrol", color: "Black",
-        condition: "New", description: "Luxury sedan.", features: "Sunroof, Leather Seats, AC"
-    }
 ];
 
 const allVehicles = [...dbData, ...mockData];
@@ -485,6 +501,7 @@ function renderTenantVehicles() {
         const displayPrice = vehicle.final_price || vehicle.price;
         const price = displayPrice ? Number(displayPrice).toLocaleString() : "---";
 
+        // FIXED: Added id=${vehicle.id} to the URL parameters
         grid.innerHTML += `
             <div class="card">
                 <div class="card-img">
@@ -500,10 +517,10 @@ function renderTenantVehicles() {
                     <div class="btn-group">
                         <button class="btn btn-details" onclick="viewDetails(${index})">View Details</button>
                         <button class="btn btn-book" 
-                            onclick="window.location.href='booking-preview.php?name=${encodeURIComponent(vehicle.name || '')}&price=${vehicle.final_price || vehicle.price || 0}&type=${encodeURIComponent(vehicle.type || '')}'"
-                            ${isAvailable ? '' : 'disabled'}>
-                            Book Now
-                        </button>
+                        onclick="window.location.href='booking-preview.php?id=${vehicle.id}&name=${encodeURIComponent(vehicle.name || '')}&price=${vehicle.final_price || vehicle.price || 0}&type=${encodeURIComponent(vehicle.type || '')}&brand=${encodeURIComponent(vehicle.brand || 'N/A')}&model=${encodeURIComponent(vehicle.model || 'N/A')}&image=${encodeURIComponent(imgSrc)}'"
+                        ${isAvailable ? '' : 'disabled'}>
+                        Book Now
+                    </button>
                     </div>
                 </div>
             </div>`;
@@ -511,14 +528,16 @@ function renderTenantVehicles() {
 }
 
 function viewDetails(index) {
-    const vehicle = allVehicles.filter(v => {
-        const typeFilter = document.getElementById("filterType").value;
-        const statusFilter = document.getElementById("filterStatus").value;
+    const typeFilter = document.getElementById("filterType").value;
+    const statusFilter = document.getElementById("filterStatus").value;
+    
+    const filteredList = allVehicles.filter(v => {
         const typeMatch = (typeFilter === "All" || v.type === typeFilter);
         const statusMatch = (statusFilter === "All" || v.availability === "Available" || v.availability == 1);
         return typeMatch && statusMatch;
-    })[index];
+    });
 
+    const vehicle = filteredList[index];
     currentVehicle = vehicle;
 
     let imgSrc = (vehicle.image && vehicle.image !== "null" && vehicle.image !== null)
@@ -527,20 +546,19 @@ function viewDetails(index) {
 
     document.getElementById("popupImage").src = imgSrc;
     document.getElementById("popupName").innerText = vehicle.name || "N/A";
-
-    document.getElementById("p_name").innerText        = vehicle.name        || "N/A";
-    document.getElementById("p_brand").innerText       = vehicle.brand       || "N/A";
-    document.getElementById("p_model").innerText       = vehicle.model       || "N/A";
-    document.getElementById("p_type").innerText        = vehicle.type        || "N/A";
-    document.getElementById("p_plate").innerText       = vehicle.plate       || vehicle.distance || "N/A";
-    document.getElementById("p_fuel").innerText        = vehicle.fuel        || vehicle.fuel_type || "N/A";
-    document.getElementById("p_color").innerText       = vehicle.color       || "N/A";
-    document.getElementById("p_condition").innerText   = vehicle.condition   || vehicle.v_condition || "N/A";
-    document.getElementById("p_features").innerText    = vehicle.features    || "N/A";
+    document.getElementById("p_name").innerText = vehicle.name || "N/A";
+    document.getElementById("p_brand").innerText = vehicle.brand || "N/A";
+    document.getElementById("p_model").innerText = vehicle.model || "N/A";
+    document.getElementById("p_type").innerText = vehicle.type || "N/A";
+    document.getElementById("p_plate").innerText = vehicle.plate || vehicle.distance || "N/A";
+    document.getElementById("p_fuel").innerText = vehicle.fuel || vehicle.fuel_type || "N/A";
+    document.getElementById("p_color").innerText = vehicle.color || "N/A";
+    document.getElementById("p_condition").innerText = vehicle.condition || vehicle.v_condition || "N/A";
+    document.getElementById("p_features").innerText = vehicle.features || "N/A";
     document.getElementById("p_description").innerText = vehicle.description || "N/A";
 
-    document.getElementById("p_price").innerText       = vehicle.price       ? "₹ " + Number(vehicle.price).toLocaleString()       : "N/A";
-    document.getElementById("p_discount").innerText    = vehicle.discount    ? "₹ " + Number(vehicle.discount).toLocaleString()    : "None";
+    document.getElementById("p_price").innerText = vehicle.price ? "₹ " + Number(vehicle.price).toLocaleString() : "N/A";
+    document.getElementById("p_discount").innerText = vehicle.discount ? "₹ " + Number(vehicle.discount).toLocaleString() : "None";
     document.getElementById("p_final_price").innerText = vehicle.final_price ? "₹ " + Number(vehicle.final_price).toLocaleString() : "N/A";
 
     const isAvailable = (vehicle.availability === "Available" || vehicle.availability == 1);
@@ -551,11 +569,8 @@ function viewDetails(index) {
 
     const bookBtn = document.getElementById("popupBookBtn");
     bookBtn.disabled = !isAvailable;
-    bookBtn.style.background = isAvailable ? "#FFD700" : "#ccc";
-    bookBtn.style.cursor = isAvailable ? "pointer" : "not-allowed";
     bookBtn.innerText = isAvailable ? "Book Now" : "Not Available";
 
-    // Reset booking fields
     document.getElementById("bookStart").value = "";
     document.getElementById("bookEnd").value = "";
     document.getElementById("calcDuration").innerText = "0";
@@ -586,9 +601,22 @@ function calculateTotal() {
 
 function bookNow() {
     if (!currentVehicle) return;
-    window.location.href = 'booking-preview.php?name=' + encodeURIComponent(currentVehicle.name || '')
-        + '&price=' + (currentVehicle.final_price || currentVehicle.price || 0)
-        + '&type=' + encodeURIComponent(currentVehicle.type || '');
+
+    let imgSrc = (currentVehicle.image && currentVehicle.image !== "null")
+        ? (currentVehicle.image.startsWith('http') ? currentVehicle.image : '../' + currentVehicle.image)
+        : 'https://placehold.co/400x250?text=No+Preview';
+
+    // FIXED: Added id=${currentVehicle.id} to the URL
+    const url = 'booking-preview.php?' + 
+        'id=' + currentVehicle.id +
+        '&name=' + encodeURIComponent(currentVehicle.name || '') +
+        '&price=' + (currentVehicle.final_price || currentVehicle.price || 0) +
+        '&type=' + encodeURIComponent(currentVehicle.type || '') +
+        '&brand=' + encodeURIComponent(currentVehicle.brand || 'N/A') +
+        '&model=' + encodeURIComponent(currentVehicle.model || 'N/A') +
+        '&image=' + encodeURIComponent(imgSrc);
+
+    window.location.href = url;
 }
 
 function closePopup() { document.getElementById("vehiclePopup").style.display = "none"; currentVehicle = null; }

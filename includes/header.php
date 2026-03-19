@@ -30,13 +30,10 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 }
 
 /* --- THE PRECISE GAP FIX --- */
-
-/* This is the base spacer (Total header height) */
 .header-spacer { 
     height: 110px; 
 }
 
-/* This creates a tiny, professional 10px gap instead of a huge space */
 .main-content, .container, .card-section {
     margin-top: 10px !important; 
     padding-top: 0 !important;
@@ -59,19 +56,19 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 
 <div class="header-main">
     <div style="display:flex; align-items:center;">
-        <img src="../assets/images/logo.png" style="height:35px;" alt="Logo">
+        <img src="/Renture1/assets/images/logo.png" style="height:70px;" alt="Logo">
         <div class="search-box">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:rgba(255,255,255,0.5); margin-right: 8px;">
                 <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
             </svg>
-            <input id="searchInput" type="text" placeholder="Search...">
+            <input id="searchInput" type="text" placeholder="Search vehicles...">
         </div>
     </div>
     <div class="right-nav">
         <?php if ($isLoggedIn): ?>
             <a class="login-btn" href="profile.php">HI, <?php echo strtoupper(htmlspecialchars(explode(' ', $userName)[0])); ?></a>
         <?php else: ?>
-            <a class="login-btn" href="../pages/log_reg.php">LOGIN</a>
+            <a class="login-btn" href="/Renture1/pages/log_reg.php">LOGIN</a>
         <?php endif; ?>
     </div>
 </div>
@@ -85,24 +82,22 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 <div id="mySidebar" class="sidebar">
     <div style="padding:20px; text-align:right;"><button onclick="closeSidebar()" style="background:none; border:none; color:#fff; font-size:30px; cursor:pointer;">&times;</button></div>
     <a href="home.php">Home</a>
-    <a href="lender.php">you want to give</a>
-    <a href="tenant.php">you want to take</a>
+    <a href="lender.php">Lender</a>
+    <a href="tenant.php">Tenant</a>
     <a href="contact-feedback.php">Feedback</a>
     <?php if ($isLoggedIn): ?>
-        <a href="../pages/logout.php" class="yellow-link">Logout</a>
+        <a href="/Renture1/pages/logout.php" class="yellow-link">Logout</a>
     <?php else: ?>
-        <a href="../pages/log_reg.php" class="yellow-link">Login / Register</a>
+        <a href="/Renture1/pages/log_reg.php" class="yellow-link">Login / Register</a>
     <?php endif; ?>
 </div>
 
 <div class="header-spacer"></div>
 
-<div class="main-content">
-    </div>
-
 <script>
 function closeSidebar() { document.getElementById('mySidebar').classList.remove('open'); }
 function forceOpenSidebar(e) { e.stopPropagation(); document.getElementById('mySidebar').classList.add('open'); }
+
 document.addEventListener('click', function(e) {
     var side = document.getElementById('mySidebar');
     if (side.classList.contains('open') && !side.contains(e.target) && !document.getElementById('hamburgerBtn').contains(e.target)) {
@@ -110,13 +105,41 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Simple search logic
-document.getElementById('searchInput').addEventListener('keyup', function() {
-    let filter = this.value.toLowerCase();
-    let cards = document.querySelectorAll('.car-card, .vehicle-card'); 
+// Live Search Logic
+document.getElementById('searchInput').addEventListener('input', function() {
+    let filter = this.value.toLowerCase().trim();
+    let cards = document.querySelectorAll('.card'); 
+    let gridContainer = document.querySelector('.grid') || document.querySelector('.listings-container');
+
     cards.forEach(card => {
-        let text = card.innerText.toLowerCase(); 
-        card.style.display = text.includes(filter) ? "" : "none";
+        if (card.classList.contains('add-vehicle-card')) return;
+
+        let vehicleName = card.querySelector('h4') ? card.querySelector('h4').innerText.toLowerCase() : "";
+        let vehicleInfo = card.querySelector('small') ? card.querySelector('small').innerText.toLowerCase() : "";
+        
+        let combinedText = vehicleName + " " + vehicleInfo;
+
+        if (combinedText.includes(filter)) {
+            card.style.display = ""; 
+            card.style.opacity = "1";
+        } else {
+            card.style.display = "none"; 
+        }
     });
+
+    // Handle "No Results" message safely
+    let visibleCards = Array.from(cards).filter(c => c.style.display !== "none" && !c.classList.contains('add-vehicle-card'));
+    let noResultsMsg = document.getElementById('no-results-alert');
+    
+    if (visibleCards.length === 0 && filter !== "" && gridContainer) {
+        if (!noResultsMsg) {
+            const msg = document.createElement('div');
+            msg.id = 'no-results-alert';
+            msg.innerHTML = `<p style="text-align:center; padding:50px; color:#64748B; width:100%;">No vehicles match "${filter}"</p>`;
+            gridContainer.appendChild(msg);
+        }
+    } else if (noResultsMsg) {
+        noResultsMsg.remove();
+    }
 });
 </script>
