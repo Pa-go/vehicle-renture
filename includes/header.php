@@ -7,14 +7,12 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 ?>
 
 <style>
-/* Reset everything to zero so WE control the space */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* --- HEADERS --- */
 .header-main {
     position: fixed; top: 0; left: 0; width: 100%; height: 65px;
     background: #1E293B; color: #F8FAFC;
@@ -29,7 +27,6 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
     box-shadow: 0 2px 5px rgba(0,0,0,0.08);
 }
 
-/* --- THE PRECISE GAP FIX --- */
 .header-spacer { 
     height: 110px; 
 }
@@ -39,7 +36,6 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
     padding-top: 0 !important;
 }
 
-/* UI Elements */
 .search-box {
     display:flex; align-items:center; background:#0F172A; border: 1px solid rgba(255,255,255,0.1); 
     border-radius:20px; padding:6px 15px; width: 260px; margin-left: 15px;
@@ -47,16 +43,17 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 .search-box input { border:none; background:transparent; color:#fff; outline:none; width: 100%; font-size: 13px; }
 .login-btn { background:#FACC15; color:#1E293B; padding:8px 20px; border-radius:8px; text-decoration:none; font-weight:800; font-size: 12px; }
 
-/* Sidebar */
 .sidebar { position: fixed; top: 0; left: -250px; width: 250px; height: 100vh; background: #0F172A; z-index: 9999; transition: 0.3s; }
 .sidebar.open { left: 0; }
 .sidebar a { display: block; color: #fff; padding: 15px 25px; text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
 .sidebar .yellow-link { color: #FACC15; }
+.sidebar .locked-link { color: #94a3b8; cursor: pointer; }
+.sidebar .locked-link:hover { color: #FACC15; }
 </style>
 
 <div class="header-main">
     <div style="display:flex; align-items:center;">
-        <img src="/Renture1/assets/images/logo.png" style="height:70px;" alt="Logo">
+        <img src="../assets/images/logo.png" style="height:70px;" alt="Logo">
         <div class="search-box">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" style="color:rgba(255,255,255,0.5); margin-right: 8px;">
                 <circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line>
@@ -66,9 +63,9 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
     </div>
     <div class="right-nav">
         <?php if ($isLoggedIn): ?>
-            <a class="login-btn" href="profile.php">HI, <?php echo strtoupper(htmlspecialchars(explode(' ', $userName)[0])); ?></a>
+            <span class="login-btn" style="cursor: default;">HI, <?php echo strtoupper(htmlspecialchars(explode(' ', $userName)[0])); ?></span>
         <?php else: ?>
-            <a class="login-btn" href="/Renture1/pages/log_reg.php">LOGIN</a>
+            <a class="login-btn" href="../pages/log_reg.php">LOGIN</a>
         <?php endif; ?>
     </div>
 </div>
@@ -80,15 +77,26 @@ $userName = $isLoggedIn ? $_SESSION['user_name'] : "";
 </div>
 
 <div id="mySidebar" class="sidebar">
-    <div style="padding:20px; text-align:right;"><button onclick="closeSidebar()" style="background:none; border:none; color:#fff; font-size:30px; cursor:pointer;">&times;</button></div>
+    <div style="padding:20px; text-align:right;">
+        <button onclick="closeSidebar()" style="background:none; border:none; color:#fff; font-size:30px; cursor:pointer;">&times;</button>
+    </div>
+
     <a href="home.php">Home</a>
-    <a href="lender.php">Lender</a>
-    <a href="tenant.php">Tenant</a>
-    <a href="contact-feedback.php">Feedback</a>
+
     <?php if ($isLoggedIn): ?>
-        <a href="/Renture1/pages/logout.php" class="yellow-link">Logout</a>
+        <a href="lender.php">Lender</a>
+        <a href="tenant.php">Tenant</a>
     <?php else: ?>
-        <a href="/Renture1/pages/log_reg.php" class="yellow-link">Login / Register</a>
+        <a class="locked-link" onclick="window.location.href='../pages/log_reg.php'">🔒 Lender</a>
+        <a class="locked-link" onclick="window.location.href='../pages/log_reg.php'">🔒 Tenant</a>
+    <?php endif; ?>
+
+    <a href="contact-feedback.php">Feedback</a>
+
+    <?php if ($isLoggedIn): ?>
+        <a href="../pages/logout.php" class="yellow-link">Logout</a>
+    <?php else: ?>
+        <a href="../pages/log_reg.php" class="yellow-link">Login / Register</a>
     <?php endif; ?>
 </div>
 
@@ -105,7 +113,6 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Live Search Logic
 document.getElementById('searchInput').addEventListener('input', function() {
     let filter = this.value.toLowerCase().trim();
     let cards = document.querySelectorAll('.card'); 
@@ -127,7 +134,6 @@ document.getElementById('searchInput').addEventListener('input', function() {
         }
     });
 
-    // Handle "No Results" message safely
     let visibleCards = Array.from(cards).filter(c => c.style.display !== "none" && !c.classList.contains('add-vehicle-card'));
     let noResultsMsg = document.getElementById('no-results-alert');
     
