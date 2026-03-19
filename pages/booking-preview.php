@@ -196,7 +196,7 @@ include __DIR__ . '/../includes/footer.php';
 const urlParams = new URLSearchParams(window.location.search);
 const vehicleId = urlParams.get('id');
 const vehicleName = urlParams.get('name') || (vehicleId === '1001' ? 'Toyota Camry Hybrid (Sample)' : 'Unknown');
-const vehiclePrice = parseFloat(urlParams.get('price')) || (vehicleId === '1001' ? 40000 : 0);
+const vehiclePrice = parseFloat(urlParams.get('price')) || (vehicleId === '1001' ? 4000 : 0);
 const vehicleBrand = urlParams.get('brand') || (vehicleId === '1001' ? 'Toyota' : 'N/A');
 const vehicleModel = urlParams.get('model') || (vehicleId === '1001' ? 'Camry' : 'N/A');
 const vehicleType = urlParams.get('type') || (vehicleId === '1001' ? 'Car' : 'Vehicle');
