@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 14, 2026 at 09:26 PM
+-- Generation Time: Mar 20, 2026 at 04:42 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,7 +42,11 @@ CREATE TABLE `bookings` (
 --
 
 INSERT INTO `bookings` (`id`, `tenant_id`, `vehicle_id`, `amount`, `payment_method`, `transaction_status`, `booking_date`) VALUES
-(1, 14, 0, 0.00, 'Cash', 'Success', '2026-03-14 18:53:14');
+(1, 14, 0, 0.00, 'Cash', 'Success', '2026-03-14 18:53:14'),
+(2, 15, 0, 44500.00, 'Card', 'Success', '2026-03-18 06:32:33'),
+(3, 15, 0, 4900.00, 'Card', 'Success', '2026-03-18 08:00:05'),
+(4, 15, 1001, 44500.00, 'UPI', 'Success', '2026-03-19 04:21:07'),
+(5, 15, 10, 4900.00, 'Cash', 'Success', '2026-03-19 04:22:06');
 
 -- --------------------------------------------------------
 
@@ -75,7 +79,8 @@ INSERT INTO `users` (`id`, `name`, `age`, `contact`, `address`, `email`, `passwo
 (7, 'g', 45, '7894561235', 'djks', 'rrr@gmail.com', '$2y$10$VFwShjwKk6RT4OV8.E8VhO0RLw7Le0g3pR6yYZCM0mqKZ/o17frWe', '2026-01-19'),
 (8, 'q', 45, '7896541235', 'wdasvsd', 'www@gmail.com', '$2y$10$i0fp3hyZa4m5FUss2P9f1eQumUYjMJiXhk645AR3EkShymLkgzQNm', '2026-01-21'),
 (9, 'o', 93, '7894561235', 'ejkldsm', 'ggg@gmail.com', '$2y$10$5p.7U.pSISLOEuiHAPveeel.a1LetE72Jj123eCiGKGIY54gzKuUS', '2026-01-20'),
-(14, 'xaden', 45, '1234567891', 'gfzcxml,. awzesxdrcftvgbhjn km,l.', 'lll@gmail.com', '$2y$10$LBCSrAZ1LM0TQd6XabNhT.C2me41JSK.bxghiwdvaoosOx/HgNnuq', '2026-04-04');
+(14, 'xaden', 45, '1234567891', 'gfzcxml,. awzesxdrcftvgbhjn km,l.', 'lll@gmail.com', '$2y$10$LBCSrAZ1LM0TQd6XabNhT.C2me41JSK.bxghiwdvaoosOx/HgNnuq', '2026-04-04'),
+(15, 'riya', 19, '9221445654', '10,ramesh niwas, kopar road', 'riyapatkar08@gmail.com', '$2y$10$R2TveyslBmeTQ6.cZjra4uXJmdCY2BKfH9OutbQ9Ok.PJf/dfOD1u', '2007-02-08');
 
 -- --------------------------------------------------------
 
@@ -111,13 +116,10 @@ CREATE TABLE `vehicles` (
 --
 
 INSERT INTO `vehicles` (`id`, `owner_id`, `vehicle_name`, `brand`, `model`, `vehicle_type`, `plate_number`, `fuel_type`, `color`, `price`, `discount`, `final_price`, `description`, `vehicle_condition`, `features`, `status`, `vehicle_image`, `created_at`, `condition`, `v_condition`) VALUES
-(1, 0, 'bmw', 'bmv', '789', 'Car', '865312', 'Diesel', 'black', 854.00, 20.00, 854.00, 'EZStdfxcvhjbknkm,l', 'New', 'azwserxdtcfvghb', 'Available', NULL, '2026-01-19 00:31:26', '', NULL),
-(2, 0, 'bmw', 'bmw', 'bmw', 'Car', '4561', 'Diesel', 'black ', 700.00, 10.00, 690.00, '', 'New', 'abs ', 'Sold', NULL, '2026-01-19 04:51:20', '', NULL),
-(3, 0, 'bn', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'uploads/1773481471_Screenshot 2026-02-17 212606.png', '2026-03-14 09:44:32', '', NULL),
-(4, 0, 'abc ', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'uploads/1773508642_Screenshot 2026-02-17 212606.png', '2026-03-14 17:17:22', '', NULL),
-(5, 14, 'a', 'hhjj', '123', 'Bike', '34567uio', 'Diesel', 'rfsdczx', 7863.00, 80.00, 7783.00, 'x6tdcf7guinhjomkp,\'.', NULL, '', 'Sold', 'uploads/1773510289_Screenshot 2026-02-17 212606.png', '2026-03-14 17:44:49', '', 'New'),
-(6, 14, 'abc ', 'qwerty', '123', 'Car', '34567uio', 'Hybrid', 'rfsdczx', 786.00, 0.00, 786.00, 'cfygvbhjukml,;./', NULL, '', 'Sold', 'uploads/1773510344_Screenshot 2026-02-17 212606.png', '2026-03-14 17:45:44', '', 'New'),
-(7, 14, 'jagur', 'asda', 'dsfjkm', 'Bike', 'qwsd', 'Petrol', 'dscx', 0.01, 5623.00, -5622.99, 'xrtdbhjk.', NULL, '/xdrctfvgybhunjkml,;', 'Pending', 'uploads/1773511039_Screenshot 2026-02-08 230705.png', '2026-03-14 17:57:19', '', 'New');
+(13, 15, 'Tata Sieaara', 'TATA', '2023', 'Car', 'MH05GD4657', 'Petrol', 'Yellow', 4500.00, 500.00, 4000.00, '11. a modern premium SUV, blending nostalgia with advanced tech, priced from 11.49 lakh. It features a 1.5L Turbo/NA petrol engine, offering 360° cameras, ADAS, a 19-inch wheel option, and a distinctive, spacious design reminiscent of the iconic original.', NULL, 'ADAS: Level 2 Advanced Driver Assistance Systems. Camera: 360-degree camera with 4Sight blind-spot monitoring. Airbags: Six airbags as standard. Brakes: Disc brakes on all four', 'Unavailable', 'uploads/1773895708_b982ad07.jpeg', '2026-03-19 04:48:28', '', 'Used'),
+(14, 15, 'Urban cruiser', 'TOYOTA', '2025', 'Car', 'MH02FD7594', 'Petrol', 'Blue', 2500.00, 300.00, 2200.00, 'The Toyota Urban Cruiser is a compact SUV designed for city driving, featuring a 1.5-liter petrol engine, 4-cylinder performance, and options for manual or automatic transmission. Known for its high driving position, reliable performance (103 bhp), and modern, spacious interior, it offers a practical, stylish, and efficient daily driving experience.', NULL, '360-degree camera, panoramic sunroof, ventilated leather seats, head-up display, 9-inch touchscreen, and advanced safety options like 6-7 airbags, ABS with EBD, and VSC.', 'Available', 'uploads/1773895960_f2422976.jpeg', '2026-03-19 04:52:40', '', 'Used'),
+(15, 15, 'Seltos', 'KIA', '2025', 'Car', 'MH02FA5023', 'Diesel', 'Grey', 3000.00, 0.00, 3000.00, 'Kia Seltos is a premium 5-seater compact SUV with a bold design, featuring of 1.5L diesel engine. It boasts a futuristic Trinity Panoramic Display, ADAS Level 2 safety, 64-color ambient lighting, ventilated seats, and a panoramic sunroof, making it a feature-packed, comfortable daily driver.', NULL, '6 Airbags, ABS with EBD, Electronic Stability Control (ESC), Hill-Start Assist Control (HAC), and all-wheel disc brakes.', 'Available', 'uploads/1773896182_323f3512.jpeg', '2026-03-19 04:56:22', '', 'Used'),
+(16, 15, 'Super Splendor', 'Hero', '2022', 'Bike', 'MH05EF6542', 'Petrol', 'black', 1000.00, 100.00, 900.00, 'The Hero Super Splendor is a popular, 125cc commuter motorcycle in India, renowned for its reliability, fuel efficiency, and practical design for daily riding. It is marketed as a &quot;no-nonsense&quot; workhorse, frequently used by office-goers and for family transportation due to its comfortable, long seat and\r\nrobust build.', NULL, 'Features i3S (idle stop-start system) for better fuel efficiency, LED headlamps (XTEC), and a USB charger.', 'Available', 'uploads/1773901760_87849c54.jpeg', '2026-03-19 06:29:20', '', 'Used');
 
 --
 -- Indexes for dumped tables
@@ -150,19 +152,19 @@ ALTER TABLE `vehicles`
 -- AUTO_INCREMENT for table `bookings`
 --
 ALTER TABLE `bookings`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `vehicles`
 --
 ALTER TABLE `vehicles`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
