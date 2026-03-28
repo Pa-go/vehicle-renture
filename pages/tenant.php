@@ -239,8 +239,13 @@ function viewDetails(id) {
     document.getElementById("p_discount").innerText = vehicle.discount ? "₹ " + Number(vehicle.discount).toLocaleString() : "None";
     document.getElementById("p_final_price").innerText = "₹ " + Number(vehicle.final_price || vehicle.price).toLocaleString();
 
+    // ✅ Set today as minimum date for both inputs
+    const today = new Date().toISOString().split('T')[0];
     document.getElementById("bookStart").value = "";
     document.getElementById("bookEnd").value = "";
+    document.getElementById("bookStart").min = today;
+    document.getElementById("bookEnd").min = today;
+
     document.getElementById("calcDuration").innerText = "0";
     document.getElementById("calcTotal").innerText = "0";
 
@@ -299,7 +304,6 @@ function calculateTotal() {
     }
 }
 
-// FIXED: Now passes all data to booking-preview.php
 function bookNowDirect(id) { 
     const duration = parseInt(document.getElementById("calcDuration").innerText);
     const start = document.getElementById("bookStart").value;
@@ -337,7 +341,13 @@ function bookNow() {
 function closePopup() { document.getElementById("vehiclePopup").style.display = "none"; }
 function outsideClick(e) { if (e.target.id === "vehiclePopup") closePopup(); }
 
-document.addEventListener("DOMContentLoaded", renderTenantVehicles);
+// ✅ Set min date on page load as well
+document.addEventListener("DOMContentLoaded", function() {
+    renderTenantVehicles();
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("bookStart").min = today;
+    document.getElementById("bookEnd").min = today;
+});
 </script>
 </body>
 </html>

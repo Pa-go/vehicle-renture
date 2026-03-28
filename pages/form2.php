@@ -139,14 +139,10 @@ input[type="file"] { background: rgba(255,255,255,0.5); padding: 10px; cursor: p
             <textarea id="features" name="features" rows="2" maxlength="500" placeholder="Airbags, Bluetooth, GPS, ABS..."></textarea>
         </div>
 
-        <div class="form-group">
-            <label for="status">14. Status:</label>
-            <select id="status" name="status" required>
-                <option value="Available">Available</option>
-                <option value="Sold">Sold</option>
-                <option value="Pending">Pending</option>
-            </select>
-        </div>
+       <div class="form-group">
+        <label for="status">14. Status:</label>
+         <input type="text" id="status" name="status" value="Available" readonly required>
+         </div>
 
         <div class="form-group">
             <label for="vehicle-image">15. Upload Vehicle Image:</label>
